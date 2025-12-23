@@ -1,0 +1,61 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  align?: 'left' | 'center';
+  className?: string;
+}
+
+const { title, subtitle, align = 'center', className = '' } = Astro.props;
+---
+
+<div class:list={['page-header', `page-header-${align}`, className]}>
+  <h1 class="page-header-title">{title}</h1>
+  {subtitle && <p class="page-header-subtitle">{subtitle}</p>}
+  <slot />
+</div>
+
+<style>
+  .page-header {
+    margin-bottom: var(--spacing-12);
+  }
+
+  .page-header-center {
+    text-align: center;
+  }
+
+  .page-header-left {
+    text-align: left;
+  }
+
+  .page-header-title {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-heading);
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 var(--spacing-4) 0;
+  }
+
+  .page-header-subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin: 0;
+    max-width: 800px;
+  }
+
+  .page-header-center .page-header-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media (max-width: 768px) {
+    .page-header {
+      margin-bottom: var(--spacing-8);
+    }
+  }
+</style>

@@ -1,0 +1,338 @@
+---
+import Layout from '../components/layouts/Layout.astro';
+
+// Earning Tiers
+const earningTiers = [
+  { 
+    tier: 'Bronze', 
+    emoji: '🥉', 
+    clips: '0-50 clips', 
+    rate: '1 hr / 10 clips',
+    bonus: null
+  },
+  { 
+    tier: 'Silver', 
+    emoji: '🥈', 
+    clips: '50-200 clips', 
+    rate: '1 hr / 8 clips',
+    bonus: null
+  },
+  { 
+    tier: 'Gold', 
+    emoji: '🥇', 
+    clips: '200+ clips', 
+    rate: '1 hr / 6 clips',
+    bonus: '+ $5 bonus'
+  },
+];
+
+// How It Works Steps
+const steps = [
+  { step: 1, title: 'Apply', description: 'Complete our 5-minute online application' },
+  { step: 2, title: 'Train', description: 'Finish a 1-hour training module' },
+  { step: 3, title: 'Verify', description: 'Review and label audio clips' },
+  { step: 4, title: 'Earn', description: 'Accumulate service hours and bonuses' },
+];
+
+// Requirements
+const requirements = [
+  'Ages 14-22',
+  'Fluent in target dialect OR learning from family',
+  'Access to computer with headphones',
+  'Parent/guardian consent (if under 18)',
+];
+
+// FAQ
+const faqs = [
+  {
+    question: 'What counts as a "verified clip"?',
+    answer: 'A verified clip is one where you\'ve reviewed an elder\'s audio recording, transcribed the content, and confirmed the AI\'s interpretation is accurate. Each clip takes about 1-2 minutes to complete.'
+  },
+  {
+    question: 'Can I work remotely?',
+    answer: 'Yes! All verification work is done online through our Youth Workbench portal. You can work from any computer with headphones and a stable internet connection.'
+  },
+  {
+    question: 'Do I need to speak the dialect fluently?',
+    answer: 'Not necessarily. If you\'re learning from family or have conversational understanding, you can still contribute. We pair youth with varying skill levels on different task types.'
+  },
+  {
+    question: 'How do I get my service hours certified?',
+    answer: 'We provide official hour verification letters on Owly Labs letterhead. Your hours are tracked automatically in the portal, and you can request a certification letter at any time.'
+  },
+];
+---
+
+<Layout title="AI Youth Labs | Earn Service Hours | Owly Labs">
+  
+  <!-- Hero Section -->
+  <section class="relative z-10 min-h-[50vh] flex flex-col items-center justify-center pt-32 pb-16">
+    <div class="container mx-auto px-6 text-center max-w-4xl">
+      
+      <div class="text-6xl mb-6">🎓</div>
+      
+      <h1 class="text-4xl md:text-6xl font-bold text-foreground mb-6 tracking-tight">
+        AI Youth Labs
+      </h1>
+      
+      <p class="text-2xl md:text-3xl text-muted-foreground mb-8">
+        Earn Service Hours. Preserve Heritage.
+      </p>
+      
+      <a href="#apply" class="btn-accent text-lg px-8 py-4 inline-block">
+        Apply Now
+      </a>
+      
+    </div>
+  </section>
+
+  <!-- The Mission Section -->
+  <section class="relative z-10 py-24 border-t border-white/5">
+    <div class="container mx-auto px-6 max-w-4xl">
+      
+      <div class="text-center mb-16">
+        <p class="text-xl md:text-2xl text-muted-foreground italic mb-8 max-w-2xl mx-auto leading-relaxed">
+          "Our grandparents built the railroads.<br/>
+          Now we're building the AI that remembers their voice."
+        </p>
+      </div>
+      
+      <!-- Three Tasks -->
+      <div class="grid md:grid-cols-3 gap-6">
+        
+        <div class="glass-panel p-6 text-center">
+          <div class="text-4xl mb-4">🎧</div>
+          <h3 class="text-lg font-bold text-foreground mb-2">Listen</h3>
+          <p class="text-sm text-muted-foreground">
+            Review elder audio clips in your dialect
+          </p>
+        </div>
+        
+        <div class="glass-panel p-6 text-center">
+          <div class="text-4xl mb-4">✏️</div>
+          <h3 class="text-lg font-bold text-foreground mb-2">Label</h3>
+          <p class="text-sm text-muted-foreground">
+            Transcribe and translate the content
+          </p>
+        </div>
+        
+        <div class="glass-panel p-6 text-center">
+          <div class="text-4xl mb-4">✓</div>
+          <h3 class="text-lg font-bold text-foreground mb-2">Validate</h3>
+          <p class="text-sm text-muted-foreground">
+            Verify AI accuracy and flag errors
+          </p>
+        </div>
+        
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="relative z-10 py-24 border-t border-white/5">
+    <div class="container mx-auto px-6 max-w-4xl">
+      
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          How It Works
+        </h2>
+        <p class="text-muted-foreground">
+          From application to service hours in four simple steps
+        </p>
+      </div>
+      
+      <!-- Steps Flow -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+        {steps.map((item, index) => (
+          <div class="text-center">
+            <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-primary">
+              {item.step}
+            </div>
+            <h3 class="font-bold text-foreground mb-2">{item.title}</h3>
+            <p class="text-xs text-muted-foreground">{item.description}</p>
+            {index < steps.length - 1 && (
+              <div class="hidden md:block absolute top-8 left-full w-full">
+                <span class="text-muted-foreground">→</span>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      
+      <!-- Details List -->
+      <div class="glass-panel p-6">
+        <ul class="space-y-3 text-muted-foreground">
+          <li class="flex items-start gap-3">
+            <span class="text-primary">•</span>
+            Complete training module (1 hour)
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-primary">•</span>
+            Access the Youth Workbench portal
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-primary">•</span>
+            Earn 1 service hour per 10 verified clips
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-primary">•</span>
+            Bonus: Tier-based quality rewards
+          </li>
+        </ul>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- Earning Tiers Section -->
+  <section class="relative z-10 py-24 border-t border-white/5">
+    <div class="container mx-auto px-6 max-w-3xl">
+      
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          Earning Tiers
+        </h2>
+        <p class="text-muted-foreground">
+          The more you contribute, the faster you earn
+        </p>
+      </div>
+      
+      <!-- Tiers Table -->
+      <div class="glass-panel overflow-hidden">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b border-border">
+              <th class="text-left p-4 text-sm font-medium text-muted-foreground">Tier</th>
+              <th class="text-left p-4 text-sm font-medium text-muted-foreground">Clips Verified</th>
+              <th class="text-left p-4 text-sm font-medium text-muted-foreground">Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            {earningTiers.map((tier) => (
+              <tr class="border-b border-border last:border-b-0">
+                <td class="p-4">
+                  <div class="flex items-center gap-3">
+                    <span class="text-2xl">{tier.emoji}</span>
+                    <span class="font-bold text-foreground">{tier.tier}</span>
+                  </div>
+                </td>
+                <td class="p-4 text-muted-foreground">{tier.clips}</td>
+                <td class="p-4">
+                  <span class="text-foreground font-medium">{tier.rate}</span>
+                  {tier.bonus && (
+                    <span class="ml-2 text-xs px-2 py-0.5 bg-primary/20 text-primary rounded-full">
+                      {tier.bonus}
+                    </span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- Partner Organizations Section -->
+  <section class="relative z-10 py-24 border-t border-white/5">
+    <div class="container mx-auto px-6 max-w-4xl text-center">
+      
+      <h2 class="text-3xl md:text-4xl font-bold text-foreground mb-4">
+        Partner Organizations
+      </h2>
+      <p class="text-muted-foreground mb-12">
+        Schools and community centers working with us to bring AI literacy and heritage preservation to students.
+      </p>
+      
+      <!-- Partner Logos Placeholder -->
+      <div class="flex flex-wrap justify-center gap-8 mb-12">
+        <div class="glass-panel px-8 py-6 text-muted-foreground">
+          <div class="text-2xl mb-2">🏫</div>
+          <span class="text-sm">CYC SF</span>
+        </div>
+        <div class="glass-panel px-8 py-6 text-muted-foreground">
+          <div class="text-2xl mb-2">📚</div>
+          <span class="text-sm">SF Unified</span>
+        </div>
+        <div class="glass-panel px-8 py-6 text-muted-foreground border-dashed">
+          <div class="text-2xl mb-2">➕</div>
+          <span class="text-sm">Your Org Here</span>
+        </div>
+      </div>
+      
+      <a href="/contact" class="inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all">
+        Become a Partner
+        <span>→</span>
+      </a>
+      
+    </div>
+  </section>
+
+  <!-- Requirements Section -->
+  <section class="relative z-10 py-24 border-t border-white/5">
+    <div class="container mx-auto px-6 max-w-3xl">
+      
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          Requirements
+        </h2>
+      </div>
+      
+      <div class="glass-panel p-6 mb-16">
+        <ul class="space-y-4">
+          {requirements.map((req) => (
+            <li class="flex items-center gap-3 text-foreground">
+              <svg class="w-5 h-5 text-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              {req}
+            </li>
+          ))}
+        </ul>
+      </div>
+      
+      <!-- CTA -->
+      <div id="apply" class="text-center">
+        <a href="/contact" class="btn-accent text-xl px-12 py-5 inline-block">
+          Apply Now — 5 Min Application
+        </a>
+        <p class="text-sm text-muted-foreground mt-4">
+          We'll respond within 48 hours
+        </p>
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="relative z-10 py-24 border-t border-white/5">
+    <div class="container mx-auto px-6 max-w-3xl">
+      
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          FAQ
+        </h2>
+      </div>
+      
+      <div class="space-y-4">
+        {faqs.map((faq) => (
+          <details class="glass-panel group">
+            <summary class="p-6 cursor-pointer flex items-center justify-between text-foreground font-medium">
+              {faq.question}
+              <span class="text-muted-foreground group-open:rotate-180 transition-transform">
+                ▼
+              </span>
+            </summary>
+            <div class="px-6 pb-6 text-muted-foreground leading-relaxed">
+              {faq.answer}
+            </div>
+          </details>
+        ))}
+      </div>
+      
+    </div>
+  </section>
+
+</Layout>

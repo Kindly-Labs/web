@@ -1,0 +1,177 @@
+/* Tailwind CSS Directives */
+@import 'tailwindcss';
+
+/* ========== AETHER "HOLOGRAPHIC MIDNIGHT" THEME ========== */
+
+:root {
+  --radius: 1.5rem;
+}
+
+body {
+  background-color: oklch(0.05 0.02 260);
+  color: oklch(0.98 0.01 240);
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background: radial-gradient(circle at 50% 0%, oklch(0.1 0.05 260) 0%, oklch(0.05 0.02 260) 100%);
+}
+
+/* ========== AMBIENT AURORA BACKGROUND ========== */
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  filter: blur(120px);
+  z-index: -1;
+  opacity: 0.4;
+  mix-blend-mode: screen;
+  animation: aurora-float 25s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+body::before {
+  background: radial-gradient(circle, #0ea5e9 0%, transparent 60%);
+  width: 80vw;
+  height: 60vh;
+  top: -20%;
+  left: -20%;
+}
+
+body::after {
+  background: radial-gradient(circle, #a855f7 0%, transparent 60%);
+  width: 90vw;
+  height: 70vh;
+  bottom: -20%;
+  right: -20%;
+  animation-delay: -10s;
+  animation-duration: 30s;
+}
+
+@keyframes aurora-float {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+
+  33% {
+    transform: translate(5%, 10%) rotate(5deg) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-5%, 5%) rotate(-5deg) scale(0.95);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+}
+
+/* ========== GLASSMORPHISM 3.0 ========== */
+
+.glass-panel {
+  background: oklch(0.1 0.03 260 / 0.4);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid oklch(1 0 0 / 0.1);
+  border-radius: 1.5rem;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.8s ease;
+  pointer-events: none;
+}
+
+.glass-panel:hover::after {
+  transform: translateX(100%);
+}
+
+/* ========== BUTTONS ========== */
+
+.btn-primary {
+  background: oklch(1 0 0 / 0.1);
+  color: oklch(0.98 0.01 240);
+  backdrop-filter: blur(12px);
+  border: 1px solid oklch(1 0 0 / 0.2);
+  border-radius: 9999px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: oklch(1 0 0 / 0.2);
+  box-shadow: 0 10px 25px -5px oklch(0.6 0.2 230 / 0.3);
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+.btn-accent {
+  background: oklch(0.6 0.2 230);
+  color: white;
+  border-radius: 9999px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  box-shadow: 0 10px 25px -5px oklch(0.6 0.2 230 / 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-accent:hover {
+  background: oklch(0.65 0.22 230);
+  transform: translateY(-2px);
+}
+
+/* ========== UTILITIES ========== */
+
+.text-glow {
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, oklch(0.6 0.2 230) 0%, oklch(0.5 0.2 280) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== SCROLLBAR ========== */
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}

@@ -1,0 +1,23 @@
+---
+import Layout from '../../components/layouts/Layout.astro';
+import ContactForm from '../../components/features/Forms/ContactForm';
+---
+
+<Layout title="Contact | Owly Labs">
+  <section class="relative z-10 pt-32 pb-24">
+    <div class="container mx-auto px-6 max-w-4xl">
+      
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-foreground mb-6">
+          Get in Touch
+        </h1>
+        <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+          Whether you're building inclusive AI products, want to contribute linguistic expertise, or just have feedback — we'd love to hear from you.
+        </p>
+      </div>
+
+      <ContactForm client:load />
+      
+    </div>
+  </section>
+</Layout>

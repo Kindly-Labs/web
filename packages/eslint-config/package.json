@@ -1,0 +1,38 @@
+{
+  "name": "@owly-labs/eslint-config",
+  "version": "0.1.0",
+  "description": "Shared ESLint configuration for Aether platform",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Owly-Labs/Aether.git",
+    "directory": "software/packages/eslint-config"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./next": "./next.js",
+    "./react": "./react.js",
+    "./base": "./base.js"
+  },
+  "files": [
+    "*.js"
+  ],
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.50.0",
+    "@typescript-eslint/parser": "^8.50.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^7.0.1"
+  },
+  "peerDependencies": {
+    "eslint": ">=9.0.0",
+    "typescript": ">=5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.2",
+    "typescript": "^5.0.0"
+  }
+}

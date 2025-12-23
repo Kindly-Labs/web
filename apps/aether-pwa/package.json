@@ -1,0 +1,47 @@
+{
+  "name": "aether",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3004",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "lint": "eslint",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@owly-labs/api-client": "*",
+    "@owly-labs/ui-kit": "*",
+    "@owly-labs/voice-utils": "*",
+    "idb": "^8.0.3",
+    "lucide-react": "^0.554.0",
+    "next": "^16.1.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "styled-jsx": "^5.1.7",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "baseline-browser-mapping": "^2.9.11",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.3",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
+    "picocolors": "^1.1.1",
+    "postcss": "^8.5.6",
+    "source-map-js": "^1.2.1",
+    "tailwindcss": "^4",
+    "ts-jest": "^29.4.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5"
+  }
+}

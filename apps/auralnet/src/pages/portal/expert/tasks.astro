@@ -1,0 +1,147 @@
+---
+import PortalLayout from '../../../layouts/PortalLayout.astro';
+import { PHRASES, TOPICS, DIALECTS, getAvailableTasks } from '../../../data/portal-data';
+
+// Get filter from URL
+const url = new URL(Astro.request.url);
+const typeFilter = url.searchParams.get('type') || 'all';
+
+// Get all available tasks (pending status)
+let tasks = getAvailableTasks('toishanese-001');
+
+// Apply filter
+if (typeFilter !== 'all') {
+    tasks = tasks.filter(p => p.requiredTasks.includes(typeFilter as any));
+}
+
+// Calculate stats
+const recordTasks = PHRASES.filter(p => p.status === 'pending' && p.requiredTasks.includes('record')).length;
+const transcribeTasks = PHRASES.filter(p => p.status === 'pending' && p.requiredTasks.includes('transcribe')).length;
+const validateTasks = PHRASES.filter(p => p.status === 'in_progress').length; // Validation for in-progress items
+---
+
+<PortalLayout title="Owly Portal | Available Tasks" activeNav="tasks">
+    
+    <!-- Page Header -->
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h2 class="text-xl font-bold text-foreground">Available Tasks</h2>
+            <p class="text-sm text-muted-foreground mt-1">Complete tasks to earn money and preserve heritage</p>
+        </div>
+    </div>
+
+    <!-- Task Type Filters -->
+    <div class="flex gap-2 mb-6 overflow-x-auto pb-2">
+        <a href="/portal/expert/tasks" 
+           class={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+               typeFilter === 'all' 
+                   ? 'bg-primary/10 text-primary border border-primary/20' 
+                   : 'bg-white/5 text-muted-foreground border border-white/10 hover:bg-white/10'
+           }`}>
+            All Tasks
+        </a>
+        <a href="/portal/expert/tasks?type=record" 
+           class={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
+               typeFilter === 'record' 
+                   ? 'bg-primary/10 text-primary border border-primary/20' 
+                   : 'bg-white/5 text-muted-foreground border border-white/10 hover:bg-white/10'
+           }`}>
+            🎤 Record <span class="text-xs opacity-70">({recordTasks})</span>
+        </a>
+        <a href="/portal/expert/tasks?type=transcribe" 
+           class={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
+               typeFilter === 'transcribe' 
+                   ? 'bg-primary/10 text-primary border border-primary/20' 
+                   : 'bg-white/5 text-muted-foreground border border-white/10 hover:bg-white/10'
+           }`}>
+            ✏️ Transcribe <span class="text-xs opacity-70">({transcribeTasks})</span>
+        </a>
+        <a href="/portal/expert/tasks?type=validate" 
+           class={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
+               typeFilter === 'validate' 
+                   ? 'bg-primary/10 text-primary border border-primary/20' 
+                   : 'bg-white/5 text-muted-foreground border border-white/10 hover:bg-white/10'
+           }`}>
+            ✓ Validate <span class="text-xs opacity-70">({validateTasks})</span>
+        </a>
+    </div>
+
+    <!-- Tasks List -->
+    <div class="space-y-4">
+        {tasks.length === 0 ? (
+            <div class="glass-panel p-12 text-center">
+                <div class="text-4xl mb-4">🎉</div>
+                <h3 class="text-lg font-bold text-foreground mb-2">No Tasks Available</h3>
+                <p class="text-sm text-muted-foreground">All current tasks have been claimed. Check back later!</p>
+            </div>
+        ) : (
+            tasks.map((phrase) => {
+                const topic = TOPICS.find(t => t.id === phrase.topicId);
+                const dialect = DIALECTS.find(d => d.id === phrase.dialectId);
+                return (
+                    <div class="glass-panel p-6 hover:bg-white/5 transition-colors group">
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="flex items-start gap-4 flex-1">
+                                <div class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-2xl">🎤</span>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="text-lg font-medium text-foreground mb-1">
+                                        "{phrase.text}"
+                                    </h3>
+                                    <p class="text-sm text-muted-foreground mb-3">
+                                        {phrase.englishHint}
+                                    </p>
+                                    
+                                    <div class="flex flex-wrap gap-2 mb-3">
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-white/10 text-muted-foreground">
+                                            {dialect?.name}
+                                        </span>
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-500/20 text-blue-400">
+                                            {topic?.name}
+                                        </span>
+                                        {topic?.isSensitive && (
+                                            <span class="px-2 py-1 text-xs font-medium rounded-full bg-red-500/20 text-red-400">
+                                                Sensitive
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {phrase.culturalNote && (
+                                        <p class="text-xs text-muted-foreground italic">
+                                            💡 {phrase.culturalNote}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col items-end gap-2 flex-shrink-0">
+                                <div class="text-right">
+                                    <p class="text-xl font-bold text-green-400">${phrase.paymentPerTask.toFixed(2)}</p>
+                                    <p class="text-xs text-muted-foreground">per task</p>
+                                </div>
+                                
+                                <div class="flex gap-2 mt-2">
+                                    {phrase.requiredTasks.map(task => (
+                                        <span class={`px-2 py-1 text-[10px] font-medium rounded-full uppercase ${
+                                            task === 'record' ? 'bg-purple-500/20 text-purple-400' :
+                                            task === 'transcribe' ? 'bg-blue-500/20 text-blue-400' :
+                                            'bg-green-500/20 text-green-400'
+                                        }`}>
+                                            {task}
+                                        </span>
+                                    ))}
+                                </div>
+                                
+                                <button class="btn-accent text-sm px-6 py-2 mt-2 opacity-70 group-hover:opacity-100 transition-opacity">
+                                    Claim Task
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })
+        )}
+    </div>
+
+</PortalLayout>

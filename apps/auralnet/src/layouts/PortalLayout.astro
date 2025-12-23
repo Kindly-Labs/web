@@ -1,0 +1,184 @@
+---
+import '../styles/tailwind.css';
+
+interface Props {
+  title?: string;
+  activeNav?: string;
+}
+
+const { title = "Owly Portal", activeNav = "dashboard" } = Astro.props;
+
+// Navigation items by role
+type NavItem = {
+  id: string;
+  label: string;
+  icon: string;
+  href: string;
+  roles: string[];
+};
+
+const NAV_ITEMS: NavItem[] = [
+  // Admin section
+  { id: 'admin-home', label: 'Admin Dashboard', icon: '👑', href: '/portal/admin', roles: ['owly_admin'] },
+  { id: 'dialects', label: 'Manage Dialects', icon: '🌍', href: '/portal/admin/dialects', roles: ['owly_admin'] },
+  { id: 'applicants', label: 'Applicants', icon: '📋', href: '/portal/admin/applicants', roles: ['owly_admin'] },
+  { id: 'payments', label: 'Payments', icon: '💳', href: '/portal/admin/payments', roles: ['owly_admin'] },
+  
+  // Dialect Admin section
+  { id: 'dialect-home', label: 'My Dialect', icon: '🗣️', href: '/portal/dialect', roles: ['dialect_admin'] },
+  { id: 'topics', label: 'Topics', icon: '📁', href: '/portal/dialect/topics', roles: ['dialect_admin'] },
+  { id: 'phrases', label: 'Phrases', icon: '💬', href: '/portal/dialect/phrases', roles: ['dialect_admin'] },
+  { id: 'review', label: 'Review Queue', icon: '✅', href: '/portal/dialect/review', roles: ['dialect_admin'] },
+  
+  // Expert section
+  { id: 'expert-home', label: 'My Dashboard', icon: '🎓', href: '/portal/expert', roles: ['expert'] },
+  { id: 'tasks', label: 'Available Tasks', icon: '📝', href: '/portal/expert/tasks', roles: ['expert'] },
+  { id: 'submissions', label: 'My Submissions', icon: '📤', href: '/portal/expert/submissions', roles: ['expert'] },
+  { id: 'earnings', label: 'Earnings', icon: '💰', href: '/portal/expert/earnings', roles: ['expert'] },
+  
+  // Partner section
+  { id: 'partner-home', label: 'Dashboard', icon: '📊', href: '/portal/dashboard', roles: ['partner'] },
+  { id: 'datasets', label: 'Datasets', icon: '📦', href: '/portal/partner/datasets', roles: ['partner'] },
+  
+  // Shared
+  { id: 'workbench', label: 'Workbench', icon: '🎧', href: '/portal/validate/demo', roles: ['expert', 'dialect_admin'] },
+];
+
+// Role display names
+const ROLE_LABELS: Record<string, string> = {
+  owly_admin: 'Owly Admin',
+  dialect_admin: 'Dialect Admin',
+  expert: 'Expert',
+  partner: 'Partner',
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+</head>
+<body class="min-h-screen flex overflow-hidden">
+    
+    <!-- Sidebar -->
+    <aside class="w-64 glass-panel !rounded-none !border-t-0 !border-b-0 !border-l-0 flex flex-col flex-shrink-0 z-20">
+        <div class="h-16 flex items-center px-6 border-b border-white/10">
+            <a href="/" class="font-bold text-lg tracking-tight text-foreground">
+                Owly<span class="text-primary">Portal</span>
+            </a>
+        </div>
+
+        <nav id="portal-nav" class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+            <div class="px-3 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider" id="role-label">
+                Loading...
+            </div>
+            
+            <!-- Navigation items will be populated by JS based on role -->
+            <div id="nav-items" class="space-y-1">
+                <!-- Placeholder while loading -->
+                <div class="px-3 py-2 text-sm text-muted-foreground">Loading navigation...</div>
+            </div>
+        </nav>
+
+        <div class="p-4 border-t border-white/10">
+            <div class="flex items-center">
+                <div id="user-avatar" class="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">?</div>
+                <div class="ml-3">
+                    <p id="user-name" class="text-sm font-medium text-foreground">Loading...</p>
+                    <p id="user-email" class="text-xs text-muted-foreground">...</p>
+                </div>
+            </div>
+            <a href="/portal" id="sign-out-btn" class="block mt-4 text-xs text-muted-foreground hover:text-foreground transition-colors">
+                ← Sign Out
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <!-- Top Header -->
+        <header class="h-16 glass-panel !rounded-none !border-t-0 !border-x-0 flex items-center justify-between px-8">
+            <h1 class="text-lg font-semibold text-foreground truncate">{title.replace('Owly Portal | ', '')}</h1>
+        </header>
+
+        <!-- Scrollable Area -->
+        <div class="flex-1 overflow-auto p-8">
+            <slot />
+        </div>
+    </main>
+
+</body>
+</html>
+
+<style is:global>
+  :root {
+    font-family: 'Inter', sans-serif;
+  }
+</style>
+
+<script define:vars={{ NAV_ITEMS, ROLE_LABELS, activeNav }}>
+  // Check for user session
+  const userJson = sessionStorage.getItem('portal_user');
+  
+  if (!userJson) {
+    // Not logged in, redirect to login
+    window.location.href = '/portal';
+  } else {
+    try {
+      const user = JSON.parse(userJson);
+      const role = user.role;
+      const email = user.email;
+      
+      // Update role label
+      const roleLabel = document.getElementById('role-label');
+      if (roleLabel) {
+        roleLabel.textContent = ROLE_LABELS[role] || role;
+      }
+      
+      // Update user info
+      const userName = document.getElementById('user-name');
+      const userEmail = document.getElementById('user-email');
+      const userAvatar = document.getElementById('user-avatar');
+      
+      if (userName) userName.textContent = email.split('@')[0].replace('.', ' ').replace(/\b\w/g, l => l.toUpperCase());
+      if (userEmail) userEmail.textContent = email;
+      if (userAvatar) userAvatar.textContent = email.charAt(0).toUpperCase();
+      
+      // Filter and render nav items
+      const navContainer = document.getElementById('nav-items');
+      if (navContainer) {
+        const filteredItems = NAV_ITEMS.filter(item => item.roles.includes(role));
+        
+        navContainer.innerHTML = filteredItems.map(item => {
+          const isActive = item.id === activeNav;
+          const activeClass = isActive 
+            ? 'bg-primary/10 text-primary' 
+            : 'text-muted-foreground hover:bg-white/5 hover:text-foreground';
+          
+          return `
+            <a href="${item.href}" class="group flex items-center px-3 py-2 text-sm font-medium rounded-xl ${activeClass} transition-colors">
+              <span class="mr-3">${item.icon}</span>
+              ${item.label}
+            </a>
+          `;
+        }).join('');
+      }
+      
+      // Sign out handler
+      document.getElementById('sign-out-btn')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        sessionStorage.removeItem('portal_user');
+        window.location.href = '/portal';
+      });
+      
+    } catch (e) {
+      console.error('Error parsing user session:', e);
+      sessionStorage.removeItem('portal_user');
+      window.location.href = '/portal';
+    }
+  }
+</script>

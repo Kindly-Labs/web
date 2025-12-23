@@ -1,0 +1,58 @@
+{
+  "name": "@owly-labs/api-client",
+  "version": "0.1.0",
+  "sideEffects": false,
+  "description": "Unified API client for Aether platform services",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Owly-Labs/Aether.git",
+    "directory": "software/packages/api-client"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./labeling": {
+      "types": "./dist/labeling.d.ts",
+      "import": "./dist/labeling.mjs",
+      "require": "./dist/labeling.js"
+    },
+    "./session": {
+      "types": "./dist/session.d.ts",
+      "import": "./dist/session.mjs",
+      "require": "./dist/session.js"
+    },
+    "./corpus": {
+      "types": "./dist/corpus.d.ts",
+      "import": "./dist/corpus.mjs",
+      "require": "./dist/corpus.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^4.0.16"
+  },
+  "peerDependencies": {
+    "typescript": ">=5.0.0"
+  },
+  "dependencies": {
+    "next": "16.1.0"
+  }
+}

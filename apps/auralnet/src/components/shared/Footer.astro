@@ -1,0 +1,94 @@
+---
+import { siteConfig } from '../../data/siteConfig';
+
+const currentYear = siteConfig.metadata.copyrightYear;
+const { business, volunteer, social } = siteConfig.footer.columns;
+const { donationTiers } = siteConfig.footer;
+const { newsletter } = siteConfig;
+
+import NewsletterForm from '../features/Newsletter/NewsletterForm';
+---
+
+<footer class="relative mt-20 border-t border-glass-stroke bg-glass-surface/30 backdrop-blur-md">
+  <!-- Mesh overlay for depth -->
+  <div class="absolute inset-0 pointer-events-none bg-gradient-to-b from-glass-surface/10 to-transparent"></div>
+
+  <div class="container relative z-10 mx-auto max-w-7xl px-6 py-12 lg:py-16">
+    <!-- Newsletter Section -->
+    <div class="mb-16 rounded-2xl border border-glass-stroke bg-glass-surface/30 p-8 backdrop-blur-md">
+      <div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+        <div class="max-w-xl">
+          <h3 class="font-mono text-lg font-bold text-accent">{newsletter.title}</h3>
+          <p class="mt-2 text-text-muted">{newsletter.description}</p>
+        </div>
+        <NewsletterForm 
+          client:visible 
+          placeholder={newsletter.placeholder} 
+          buttonText={newsletter.buttonText} 
+        />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <!-- Column 1: Business -->
+      <div class="flex flex-col gap-4">
+        <h3 class="font-mono text-sm font-bold uppercase tracking-wider text-terracotta-400">{business.title}</h3>
+        <nav class="flex flex-col gap-3">
+          {business.links.map(link => (
+            <a href={link.href} class="text-sm text-text-muted transition-colors hover:text-white">
+              {link.text}
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <!-- Column 2: Give Time -->
+      <div class="flex flex-col gap-4">
+        <h3 class="font-mono text-sm font-bold uppercase tracking-wider text-terracotta-400">{volunteer.title}</h3>
+        <nav class="flex flex-col gap-3">
+          {volunteer.links.map(link => (
+            <a href={link.href} class="text-sm text-text-muted transition-colors hover:text-white">
+              {link.text}
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <!-- Column 3: Give Voice -->
+      <div class="flex flex-col gap-4">
+        <h3 class="font-mono text-sm font-bold uppercase tracking-wider text-terracotta-400">{social.title}</h3>
+        <nav class="flex flex-col gap-3">
+          {social.links.map(link => (
+            <a 
+              href={link.href} 
+              target={link.external ? "_blank" : undefined}
+              rel={link.external ? "noopener noreferrer" : undefined}
+              class="text-sm text-text-muted transition-colors hover:text-white"
+            >
+              {link.text}
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <!-- Column 4: Donation -->
+      <div class="flex flex-col gap-4">
+        <h3 class="font-mono text-sm font-bold uppercase tracking-wider text-terracotta-400">Donation</h3>
+        <div class="flex flex-col gap-3">
+          {donationTiers.map(tier => (
+            <a href={tier.url} class="flex items-center justify-between p-2 rounded bg-white/5 hover:bg-accent/20 border border-white/10 hover:border-accent/50 transition-all group">
+              <span class="text-sm font-bold text-text-light group-hover:text-accent">${tier.amount}</span>
+              <span class="text-xs text-text-muted uppercase tracking-wider group-hover:text-accent">{tier.label}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-12 border-t border-glass-stroke/30 pt-8 text-center">
+      <p class="font-mono text-xs text-text-muted">
+        &copy; {currentYear} {siteConfig.metadata.siteName} | {siteConfig.metadata.tagline}
+      </p>
+    </div>
+  </div>
+</footer>

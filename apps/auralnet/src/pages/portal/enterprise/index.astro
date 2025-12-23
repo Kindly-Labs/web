@@ -1,0 +1,34 @@
+---
+import Layout from '../../../components/layouts/Layout.astro';
+import EnterpriseMarketplace from '../../../components/features/Enterprise/EnterpriseMarketplace';
+---
+
+<Layout title="Enterprise | AuralNet">
+
+  <div class="min-h-screen pt-32 px-8 md:px-16 pb-16 max-w-[1400px] mx-auto">
+
+    <!-- Dashboard Header -->
+    <header class="border-b border-foreground/20 pb-8 mb-12 flex justify-between items-end">
+      <div>
+        <div class="flex items-center gap-4 mb-2">
+          <a href="/portal/dashboard" class="text-muted-foreground hover:text-foreground transition-colors">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+          </a>
+          <h1 class="text-xs font-mono uppercase tracking-widest text-muted-foreground">[ ENTERPRISE / DATA LICENSING ]</h1>
+        </div>
+        <div class="text-2xl font-mono">AuralNet <span class="text-primary">Enterprise</span></div>
+        <p class="text-sm text-muted-foreground mt-1">Licensed Audio Datasets for AI Training</p>
+      </div>
+      <div class="text-right font-mono text-xs">
+        <div class="mb-1">LICENSE_MODE: <span class="text-green-500">ACTIVE</span></div>
+        <div>CONTACT: enterprise@auralnet.ai</div>
+      </div>
+    </header>
+
+    <!-- Enterprise Marketplace Component -->
+    <EnterpriseMarketplace client:load />
+
+  </div>
+</Layout>

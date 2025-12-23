@@ -1,0 +1,137 @@
+---
+import Layout from '../components/layouts/Layout.astro';
+---
+
+<Layout title="AuralNet | The Rosetta Stone for AI">
+  
+  <!-- Hero: The Manifesto -->
+  <section class="min-h-screen flex flex-col justify-center px-8 md:px-16 pt-24 pb-12">
+    <div class="max-w-[1400px] mx-auto w-full">
+      
+      <!-- The Big Idea -->
+      <h1 class="text-6xl md:text-9xl font-bold tracking-tighter text-foreground mb-16 leading-[0.85] uppercase">
+        The Rosetta<br/>
+        Stone for<br/>
+        <span class="text-muted-foreground">The AI Era.</span>
+      </h1>
+      
+      <div class="grid md:grid-cols-12 gap-12 items-start border-t border-foreground pt-8">
+        <div class="md:col-span-5">
+           <p class="text-xl md:text-3xl font-medium leading-tight max-w-lg">
+            Visual AI has ImageNet.<br/>
+            Aural AI has AuralNet.
+          </p>
+        </div>
+        
+        <div class="md:col-span-7 space-y-12">
+          <p class="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl">
+            Modern AI is fluent in English, Mandarin, and Spanish—but deaf to the rest of the human story.
+            <strong class="text-foreground">AuralNet</strong> is the sovereign registry for the 3,000 languages the internet forgot.
+          </p>
+          
+          <div class="flex flex-col md:flex-row gap-6">
+             <a href="/contact" class="inline-flex items-center justify-center px-8 py-4 bg-foreground text-background font-mono text-sm tracking-widest hover:bg-primary transition-colors uppercase">
+               Request Access
+             </a>
+             <a href="/research" class="inline-flex items-center gap-4 px-8 py-4 border border-foreground/20 font-mono text-sm tracking-widest hover:border-foreground transition-colors uppercase">
+               Read Science →
+             </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- The Science: Minimalist Formula -->
+  <section class="py-32 px-8 md:px-16 border-t border-border">
+    <div class="max-w-[1400px] mx-auto w-full">
+      
+      <div class="flex flex-col md:flex-row justify-between items-baseline mb-32">
+        <h2 class="text-xs font-mono uppercase tracking-widest text-muted-foreground">[ 01 ] Methodology</h2>
+        <span class="text-xs font-mono uppercase tracking-widest text-muted-foreground">Deep Listening</span>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-16 md:gap-8">
+        
+        <div class="group">
+           <div class="h-px w-full bg-foreground/20 mb-6 group-hover:bg-primary transition-colors"></div>
+           <h3 class="text-4xl font-light mb-4">Acoustic</h3>
+           <p class="text-muted-foreground text-sm font-mono uppercase tracking-widest">Phonetics / Accent / Tone</p>
+        </div>
+
+        <div class="group">
+           <div class="h-px w-full bg-foreground/20 mb-6 group-hover:bg-primary transition-colors"></div>
+           <h3 class="text-4xl font-light mb-4">Intent</h3>
+           <p class="text-muted-foreground text-sm font-mono uppercase tracking-widest">Meaning / Semantics / Logic</p>
+        </div>
+
+        <div class="group">
+           <div class="h-px w-full bg-foreground/20 mb-6 group-hover:bg-primary transition-colors"></div>
+           <h3 class="text-4xl font-light mb-4">Context</h3>
+           <p class="text-muted-foreground text-sm font-mono uppercase tracking-widest">Setting / Culture / History</p>
+        </div>
+
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- The Audit: Stark Reality -->
+  <section class="py-32 px-8 md:px-16 border-t border-border bg-foreground text-background">
+    <div class="max-w-[1400px] mx-auto w-full">
+      
+      <div class="flex flex-col md:flex-row justify-between items-baseline mb-32">
+        <h2 class="text-xs font-mono uppercase tracking-widest opacity-60">[ 02 ] The Aether Benchmark</h2>
+        <span class="text-xs font-mono uppercase tracking-widest opacity-60">Global Audit</span>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-24">
+        <div>
+          <h2 class="text-5xl md:text-7xl font-bold mb-12 leading-tight">
+            Your model is<br/>hallucinating.
+          </h2>
+          <p class="text-xl opacity-80 leading-relaxed max-w-md mb-12">
+            The Aether Benchmark is the industry standard for dialect integrity. 
+            Adversarial testing. Blind sets. Human verified.
+          </p>
+          <a href="/contact" class="inline-block border border-background px-8 py-4 font-mono text-sm tracking-widest hover:bg-background hover:text-foreground transition-colors uppercase">
+             Start Audit
+           </a>
+        </div>
+        
+        <div class="font-mono text-xs md:text-sm">
+          <div class="border border-white/20 p-8 h-full flex flex-col justify-between">
+            <div class="space-y-4">
+              <div class="opacity-50 border-b border-white/10 pb-4">root@auralnet:~$ ./audit_model.sh --target=gpt-4o</div>
+              
+              <div class="grid grid-cols-2 gap-8 pt-4">
+                <div>
+                  <div class="opacity-50 mb-1">TARGET_DIALECT</div>
+                  <div class="text-blue-400">TOISHANESE (zh-toishan)</div>
+                </div>
+                <div>
+                  <div class="opacity-50 mb-1">STATUS</div>
+                  <div class="text-red-400 animate-pulse">CRITICAL FAIL</div>
+                </div>
+              </div>
+              
+              <div class="opacity-50 pt-8">ERROR LOG:</div>
+              <div class="text-red-300">
+                > Input: "Hoi-san bus gei dim lai?"<br/>
+                > Model: "Where is the seafood restaurant?"<br/>
+                > Actual: "When is the bus coming?"
+              </div>
+            </div>
+            
+            <div class="pt-12 text-right">
+              <span class="inline-block px-2 py-1 bg-red-500/20 text-red-500 border border-red-500/50">WER: 42.8%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</Layout>

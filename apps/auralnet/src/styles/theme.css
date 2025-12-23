@@ -1,0 +1,15 @@
+/* src/styles/theme.css - Minimal Paper Theme */
+
+:root {
+  /* Layout */
+  --header-height: 64px;
+
+  /* We rely on Tailwind config for colors (paper, ink, accent) */
+  /* This file is kept for any necessary custom vars or legacy compatibility */
+}
+
+/* Global resets if needed */
+body {
+  margin: 0;
+  padding: 0;
+}

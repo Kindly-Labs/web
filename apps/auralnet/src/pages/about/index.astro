@@ -1,0 +1,149 @@
+---
+import Layout from '../../components/layouts/Layout.astro';
+import Prose from '../../components/ui/layout/Prose.astro';
+import Button from '../../components/ui/forms/Button.astro';
+import GlassCard from '../../components/ui/glass/GlassCard.astro';
+import MissionAnimation from '../../components/features/Home/MissionAnimation.astro';
+import HoverLift from '../../components/ui/effects/HoverLift.astro';
+---
+
+<Layout title="Our Story | Owly Labs">
+  <!-- Hero Section -->
+  <section class="relative z-10 pt-32 pb-12 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-earth-900 via-earth-800 to-earth-900 opacity-50 z-0"></div>
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-5xl md:text-6xl font-bold font-mono text-text-light mb-6">
+        Our Story
+      </h1>
+      <p class="text-xl text-text-muted max-w-3xl mx-auto font-light">
+        Preserving the voices that make humanity extraordinary.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="relative z-10 pb-24">
+    <div class="container mx-auto px-4 max-w-4xl">
+      <Prose>
+        <p class="subtitle border-l-4 border-accent pl-6 italic text-xl text-text-muted mb-12 font-serif">
+          It started with a simple question: "If AI learns from the internet, what happens to the voices that aren't online?"
+        </p>
+
+        <h2 id="origin" class="text-3xl font-bold text-accent mb-6 font-mono">The Origin Story</h2>
+        <p class="mb-4">The journey began not in a server room, but in a community center.</p>
+      </Prose>
+
+      <!-- Interactive Timeline Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-12">
+        <HoverLift>
+          <GlassCard variant="card" class="p-6 h-full border border-terracotta-500/20 bg-earth-800/40">
+            <div class="text-4xl mb-4">🤫</div>
+            <h3 class="text-xl font-bold text-terracotta-400 mb-2">The Silence</h3>
+            <p class="text-sm text-text-muted">
+              Working with elders in Chinatown, we noticed they couldn't use modern tools. Voice assistants didn't understand Toishanese. Translation apps failed on Spanglish. Their wisdom was being silenced by technology.
+            </p>
+          </GlassCard>
+        </HoverLift>
+
+        <HoverLift>
+          <GlassCard variant="card" class="p-6 h-full border border-terracotta-500/20 bg-earth-800/40">
+            <div class="text-4xl mb-4">💡</div>
+            <h3 class="text-xl font-bold text-terracotta-400 mb-2">The Realization</h3>
+            <p class="text-sm text-text-muted">
+              We realized that preserving heritage isn't just about history—it's about the future. If we don't build AI that understands these dialects now, they might be lost forever.
+            </p>
+          </GlassCard>
+        </HoverLift>
+
+        <HoverLift>
+          <GlassCard variant="card" class="p-6 h-full border border-terracotta-500/20 bg-earth-800/40">
+            <div class="text-4xl mb-4">🗣️</div>
+            <h3 class="text-xl font-bold text-terracotta-400 mb-2">The Solution</h3>
+            <p class="text-sm text-text-muted">
+              We built the Voice Passport. A way for communities to preserve their dialects while unlocking AI that truly understands them. Data as culture, not just commodity.
+            </p>
+          </GlassCard>
+        </HoverLift>
+      </div>
+
+      <Prose>
+        <h2 id="mission" class="text-3xl font-bold text-accent mb-6 font-mono">Why Dialects Matter</h2>
+        <p class="mb-6">
+          Every two weeks, a language dies. With it goes centuries of knowledge, unique perspectives on the world, and the intimate connection between generations.
+        </p>
+        <p class="mb-6">
+          Owly Labs exists to reverse this trend. We are building the infrastructure to digitize, preserve, and revitalize the world's linguistic heritage through advanced AI.
+        </p>
+      </Prose>
+
+      <!-- 3D Visualization -->
+      <div class="my-12 relative">
+        <div class="absolute inset-0 bg-accent-gold/5 blur-3xl rounded-full"></div>
+        <MissionAnimation />
+        <p class="text-center text-sm text-text-muted mt-4">
+          <em>Visualizing the global web of dialects we are weaving together.</em>
+        </p>
+      </div>
+
+      <Prose>
+        <h2 id="values" class="text-3xl font-bold text-accent mb-6 font-mono">Core Values</h2>
+      </Prose>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
+        <GlassCard variant="card" class="p-6 flex items-center gap-4 border border-earth-700 hover:border-accent transition-colors">
+          <span class="text-3xl">🏛️</span>
+          <div>
+            <h4 class="font-bold text-text-light">Heritage First</h4>
+            <p class="text-xs text-text-muted">We preserve culture before we write code.</p>
+          </div>
+        </GlassCard>
+        <GlassCard variant="card" class="p-6 flex items-center gap-4 border border-earth-700 hover:border-accent transition-colors">
+          <span class="text-3xl">💎</span>
+          <div>
+            <h4 class="font-bold text-text-light">Your Voice Has Value</h4>
+            <p class="text-xs text-text-muted">Data is labor. Contributors earn lifetime access.</p>
+          </div>
+        </GlassCard>
+        <GlassCard variant="card" class="p-6 flex items-center gap-4 border border-earth-700 hover:border-accent transition-colors">
+          <span class="text-3xl">🌍</span>
+          <div>
+            <h4 class="font-bold text-text-light">Universal Access</h4>
+            <p class="text-xs text-text-muted">AI should serve everyone, in every language.</p>
+          </div>
+        </GlassCard>
+        <GlassCard variant="card" class="p-6 flex items-center gap-4 border border-earth-700 hover:border-accent transition-colors">
+          <span class="text-3xl">🎋</span>
+          <div>
+            <h4 class="font-bold text-text-light">Cultural Integrity</h4>
+            <p class="text-xs text-text-muted">We respect the nuances of every community.</p>
+          </div>
+        </GlassCard>
+      </div>
+
+      <Prose>
+        <h2 class="text-3xl font-bold text-accent mb-6 font-mono">Our Team</h2>
+        <p>
+          We are a collective of linguists, engineers, and cultural preservationists. We don't just build software; we build bridges between the past and the future.
+        </p>
+      </Prose>
+
+      <section class="cta-section mt-16 p-12 rounded-2xl bg-gradient-to-br from-earth-800 to-earth-900 border border-accent/20 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('/noise.png')] opacity-5"></div>
+        <Prose>
+          <h2 class="text-text-light relative z-10">Be Part of the Movement</h2>
+          <p class="relative z-10">Help us bring every dialect online.</p>
+        </Prose>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8 relative z-10">
+          <Button href="/contact?type=business" variant="secondary">Partner with Us</Button>
+          <Button href="/contribute" variant="primary">Start Voice Passport</Button>
+        </div>
+      </section>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .subtitle {
+    font-family: var(--font-family-body);
+  }
+</style>

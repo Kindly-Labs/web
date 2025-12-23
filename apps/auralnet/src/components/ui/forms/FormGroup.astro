@@ -1,0 +1,68 @@
+---
+interface Props {
+  label?: string;
+  htmlFor?: string;
+  required?: boolean;
+  error?: string;
+  helpText?: string;
+  className?: string;
+}
+
+const {
+  label,
+  htmlFor,
+  required = false,
+  error,
+  helpText,
+  className = ''
+} = Astro.props;
+---
+
+<div class:list={['form-group', error && 'form-group-error', className]}>
+  {label && (
+    <label for={htmlFor} class="form-label">
+      {label}
+      {required && <span class="form-required">*</span>}
+    </label>
+  )}
+  <slot />
+  {helpText && <p class="form-help-text">{helpText}</p>}
+  {error && <p class="form-error-text">{error}</p>}
+</div>
+
+<style>
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  .form-label {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-light);
+    font-size: var(--font-size-base);
+  }
+
+  .form-required {
+    color: var(--color-secondary);
+    margin-left: var(--spacing-1);
+  }
+
+  .form-help-text {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .form-error-text {
+    font-size: var(--font-size-sm);
+    color: var(--color-secondary);
+    margin: 0;
+  }
+
+  .form-group-error :global(.input),
+  .form-group-error :global(.textarea),
+  .form-group-error :global(.select) {
+    border-color: var(--color-secondary);
+  }
+</style>

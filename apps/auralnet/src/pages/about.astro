@@ -1,0 +1,74 @@
+---
+import Layout from '../components/layouts/Layout.astro';
+---
+
+<Layout title="About | AuralNet">
+  
+  <div class="min-h-screen pt-32 px-8 md:px-16 pb-32 max-w-[1400px] mx-auto">
+    
+    <!-- Header: The Lost Archive -->
+    <header class="mb-32">
+      <div class="flex flex-col md:flex-row justify-between items-start border-b border-foreground/20 pb-8 mb-8">
+        <h1 class="text-xs font-mono uppercase tracking-widest text-muted-foreground">[ ABOUT / 002 ]</h1>
+        <div class="text-xs font-mono uppercase tracking-widest text-muted-foreground text-right hidden md:block">
+          Owly Labs Intelligence<br/>
+          Est. 2025
+        </div>
+      </div>
+
+      <h2 class="text-5xl md:text-8xl font-bold tracking-tighter mb-12 max-w-4xl leading-[0.9]">
+        The Lost<br/>
+        Archive.
+      </h2>
+
+      <div class="grid md:grid-cols-2 gap-16">
+        <p class="text-xl md:text-2xl font-medium leading-relaxed text-muted-foreground">
+          Every two weeks, a language dies. With it goes centuries of knowledge, unique perspectives on reality, and the intimate connection between generations.
+        </p>
+        <p class="text-lg leading-relaxed opacity-80">
+          Owly Labs exists to reverse this trend. We are not a tech company. We are a digital preservation institute building the infrastructure to decode, archive, and revitalize the world's linguistic heritage through advanced AI.
+        </p>
+      </div>
+    </header>
+
+    <!-- The Constitution -->
+    <section>
+      <div class="border-t border-foreground/20 pt-8 mb-16">
+        <h3 class="text-xs font-mono uppercase tracking-widest mb-4 text-primary">Charter</h3>
+        <h4 class="text-5xl md:text-7xl font-bold mb-12">The Protocol</h4>
+      </div>
+
+      <div class="grid gap-px bg-foreground/10 border border-foreground/10">
+        
+        <div class="bg-background p-12 hover:bg-foreground/5 transition-colors">
+          <div class="font-mono text-xs mb-4 opacity-50">ARTICLE I</div>
+          <h3 class="text-3xl font-bold mb-4">Fair Trade Data</h3>
+          <p class="opacity-70 max-w-2xl leading-relaxed">
+            We do not extract data; we partner with communities. Contributors retain sovereignty over their cultural assets. 
+            Value generated from the AuralNet registry is reinvested into language revitalization programs.
+          </p>
+        </div>
+
+        <div class="bg-background p-12 hover:bg-foreground/5 transition-colors">
+          <div class="font-mono text-xs mb-4 opacity-50">ARTICLE II</div>
+          <h3 class="text-3xl font-bold mb-4">No Cloning</h3>
+          <p class="opacity-70 max-w-2xl leading-relaxed">
+            Our models learn *how* people speak, not *who* is speaking. We explicitly prohibit the generation of individual voice clones. 
+            Our technology is designed for understanding (ASR/NLU), not impersonation (TTS).
+          </p>
+        </div>
+
+        <div class="bg-background p-12 hover:bg-foreground/5 transition-colors">
+          <div class="font-mono text-xs mb-4 opacity-50">ARTICLE III</div>
+          <h3 class="text-3xl font-bold mb-4">Radical Inclusion</h3>
+          <p class="opacity-70 max-w-2xl leading-relaxed">
+            "Standard" languages are a myth. Real human communication is messy, dialect-rich, and context-dependent. 
+            We build for the reality of the street, not the classroom.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</Layout>

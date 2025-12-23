@@ -1,0 +1,54 @@
+---
+import Layout from '../../components/layouts/Layout.astro';
+import AudioRecorder from '../../components/features/VoicePassport/AudioRecorder';
+import Prose from '../../components/ui/layout/Prose.astro';
+
+// Demo Data
+const demoPhrase = "Ngei hai Toisan-ngin. (I am a Toishanese person.)";
+const demoSegments = [
+  "Ngei",
+  "hai",
+  "Toisan-ngin"
+];
+---
+
+<Layout title="Voice Passport | Owly Labs">
+  <section class="relative z-10 pt-32 pb-20 min-h-screen overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-earth-900 via-earth-800 to-terracotta-900/30 opacity-50 z-0"></div>
+    
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="max-w-4xl mx-auto text-center mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full bg-accent/10 border border-accent/20 backdrop-blur-sm">
+          <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+          <span class="text-xs font-mono text-accent font-bold tracking-wider">LIVE RECORDING SESSION</span>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold font-serif text-text-light mb-4">
+          Preserve Your Voice
+        </h1>
+        <p class="text-text-muted">
+          Read the following phrase to calibrate your Voice Passport.
+        </p>
+      </div>
+
+      <AudioRecorder 
+        client:only="react"
+        phrase={demoPhrase}
+        segments={demoSegments}
+        dialect="Toishanese"
+        onUpload={async (result) => {
+          // In a real app, this would upload to S3/Blob storage
+          console.log('Uploaded blob of size:', result.full.size);
+          // Simulate delay
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }}
+      />
+      
+      <div class="mt-12 text-center">
+        <p class="text-xs text-text-muted font-mono">
+          By recording, you agree to our <a href="/transparency" class="underline hover:text-accent">Contributor Terms</a>. 
+          Your voice functionality will be encrypted and owned by you.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>

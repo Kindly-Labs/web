@@ -1,0 +1,67 @@
+---
+interface Props {
+  name: string;
+  id: string;
+  placeholder?: string;
+  required?: boolean;
+  rows?: number;
+  className?: string;
+}
+
+const {
+  name,
+  id,
+  placeholder,
+  required = false,
+  rows = 4,
+  className = ''
+} = Astro.props;
+---
+
+<textarea
+  name={name}
+  id={id}
+  placeholder={placeholder}
+  required={required}
+  rows={rows}
+  class:list={['textarea', className]}
+></textarea>
+
+<style>
+  .textarea {
+    width: 100%;
+    padding: var(--spacing-4);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 2px solid var(--color-border-light);
+    border-radius: var(--border-radius-base);
+    color: var(--color-text-light);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    resize: vertical;
+    transition: all 0.3s ease;
+  }
+
+  .textarea::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.6;
+  }
+
+  .textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(124, 179, 66, 0.2);
+  }
+
+  .textarea:hover:not(:focus) {
+    border-color: rgba(124, 179, 66, 0.4);
+  }
+
+  .textarea:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+</style>

@@ -1,0 +1,154 @@
+---
+import PortalLayout from '../../../layouts/PortalLayout.astro';
+import { DIALECTS, TOPICS, PHRASES, getTopicsByDialect } from '../../../data/portal-data';
+
+// Get the dialect from URL or default to first assigned dialect
+const dialectId = Astro.url.pathname.split('/').pop() || 'toishanese-001';
+const dialect = DIALECTS.find(d => d.id === dialectId) || DIALECTS[0];
+const topics = getTopicsByDialect(dialect.id);
+
+// Calculate stats
+const totalPhrases = topics.reduce((sum, t) => sum + t.phraseCount, 0);
+const completedPhrases = topics.reduce((sum, t) => sum + t.completedPhrases, 0);
+const pendingReview = topics.filter(t => t.status === 'pending_review' || t.status === 'admin_review').length;
+const readyForSale = topics.filter(t => t.status === 'ready_for_sale').length;
+
+// Status colors for topic badges
+const statusColors = {
+    'draft': 'bg-white/10 text-muted-foreground',
+    'active': 'bg-blue-500/20 text-blue-400',
+    'in_progress': 'bg-yellow-500/20 text-yellow-400',
+    'pending_review': 'bg-orange-500/20 text-orange-400',
+    'admin_review': 'bg-purple-500/20 text-purple-400',
+    'ready_for_sale': 'bg-green-500/20 text-green-400'
+};
+
+// Calculate progress percentages
+const dialectProgress = Math.round((dialect.completedSamples / dialect.targetSamples) * 100);
+const topicsWithProgress = topics.map(t => ({
+    ...t,
+    progress: t.phraseCount > 0 ? Math.round((t.completedPhrases / t.phraseCount) * 100) : 0
+}));
+---
+
+<PortalLayout title={`Owly Portal | ${dialect.name}`} activeNav="dialect-home">
+    
+    <!-- Welcome Banner -->
+    <div class="glass-panel p-6 mb-8 bg-gradient-to-r from-purple-500/10 to-transparent">
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-xl font-bold text-foreground mb-1">🗣️ {dialect.name}</h2>
+                <p class="text-sm text-muted-foreground">{dialect.region}</p>
+            </div>
+            <span class={`px-3 py-1 text-sm font-medium rounded-full ${
+                dialect.status === 'active' ? 'bg-green-500/20 text-green-400' : 
+                dialect.status === 'pilot' ? 'bg-yellow-500/20 text-yellow-400' :
+                'bg-white/10 text-muted-foreground'
+            }`}>
+                {dialect.status}
+            </span>
+        </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="glass-panel p-6">
+            <dt class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Sample Progress</dt>
+            <dd class="mt-2">
+                <span class="text-3xl font-bold text-primary">{dialect.completedSamples}</span>
+                <span class="text-lg text-muted-foreground">/ {dialect.targetSamples}</span>
+            </dd>
+            <div class="mt-2 h-2 bg-white/10 rounded-full overflow-hidden">
+                <div class="h-full bg-primary rounded-full" style={`width: ${dialectProgress}%`}></div>
+            </div>
+        </div>
+        <div class="glass-panel p-6">
+            <dt class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Topics</dt>
+            <dd class="mt-2 text-3xl font-bold text-foreground">{topics.length}</dd>
+        </div>
+        <div class="glass-panel p-6">
+            <dt class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Pending Review</dt>
+            <dd class="mt-2 text-3xl font-bold text-yellow-400">{pendingReview}</dd>
+        </div>
+        <div class="glass-panel p-6">
+            <dt class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Ready for Sale</dt>
+            <dd class="mt-2 text-3xl font-bold text-green-400">{readyForSale}</dd>
+        </div>
+    </div>
+
+    <!-- Topics Table -->
+    <div class="glass-panel overflow-hidden mb-8">
+        <div class="px-6 py-4 border-b border-white/10 flex justify-between items-center">
+            <h2 class="text-lg font-bold text-foreground">Topics</h2>
+            <a href="/portal/dialect/topics" class="btn-primary text-xs px-4 py-2">+ Create Topic</a>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead class="bg-white/5">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Topic</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Category</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Progress</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5">
+                    {topicsWithProgress.map((topic) => (
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-sm font-medium text-foreground">{topic.name}</span>
+                                        {topic.isSensitive && (
+                                            <span class="px-1.5 py-0.5 text-[10px] font-medium rounded bg-red-500/20 text-red-400">SENSITIVE</span>
+                                        )}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm text-muted-foreground capitalize">{topic.category}</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex-1 h-2 bg-white/10 rounded-full overflow-hidden max-w-[80px]">
+                                            <div class="h-full bg-primary rounded-full" style={`width: ${topic.progress}%`}></div>
+                                        </div>
+                                        <span class="text-xs text-muted-foreground">{topic.completedPhrases}/{topic.phraseCount}</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class={`px-2 py-1 text-xs font-medium rounded-full ${statusColors[topic.status] || 'bg-white/10'}`}>
+                                        {topic.status.replace(/_/g, ' ')}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right">
+                                    <a href="/portal/dialect/phrases" class="text-primary text-sm hover:underline">Manage →</a>
+                                </td>
+                            </tr>
+                        ))}
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <h2 class="text-lg font-bold text-foreground mb-4">Quick Actions</h2>
+    <div class="grid md:grid-cols-3 gap-4">
+        <a href="/portal/dialect/topics" class="glass-panel p-6 text-left hover:bg-white/10 transition-colors group">
+            <div class="text-2xl mb-3">📁</div>
+            <h3 class="font-bold text-foreground mb-1 group-hover:text-primary transition-colors">Add Topic</h3>
+            <p class="text-xs text-muted-foreground">Create a new category of phrases</p>
+        </a>
+        <a href="/portal/dialect/phrases" class="glass-panel p-6 text-left hover:bg-white/10 transition-colors group">
+            <div class="text-2xl mb-3">💬</div>
+            <h3 class="font-bold text-foreground mb-1 group-hover:text-primary transition-colors">Add Phrases</h3>
+            <p class="text-xs text-muted-foreground">Add phrases for experts to work on</p>
+        </a>
+        <a href="/portal/dialect/review" class="glass-panel p-6 text-left hover:bg-white/10 transition-colors group">
+            <div class="text-2xl mb-3">✅</div>
+            <h3 class="font-bold text-foreground mb-1 group-hover:text-primary transition-colors">Review Submissions</h3>
+            <p class="text-xs text-muted-foreground">Approve expert work</p>
+        </a>
+    </div>
+
+</PortalLayout>

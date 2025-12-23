@@ -1,0 +1,160 @@
+---
+import GlassCard from '../../ui/glass/GlassCard.astro';
+import HoverLift from '../../ui/effects/HoverLift.astro';
+import { impactMetrics, insights } from './data/impactMetrics';
+
+const metricIcons = {
+  volunteers: `<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>`,
+  businesses: `<rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>`,
+  hours: `<circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>`,
+  impact: `<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>`
+};
+
+const colorMap = {
+  'neon-400': {
+    text: 'text-neon-400',
+    bg: 'bg-neon-400/10',
+    border: 'border-neon-400'
+  },
+  'secondary': {
+    text: 'text-secondary',
+    bg: 'bg-secondary/10',
+    border: 'border-secondary'
+  },
+  'accent-blue': {
+    text: 'text-accent-blue',
+    bg: 'bg-accent-blue/10',
+    border: 'border-accent-blue'
+  },
+  'accent': {
+    text: 'text-accent',
+    bg: 'bg-accent/10',
+    border: 'border-accent'
+  }
+};
+---
+
+<section id="impact-dashboard" class="relative py-32">
+  <div class="container mx-auto max-w-7xl px-6">
+    <div class="section-header">
+      <h2 class="text-4xl md:text-5xl font-bold font-mono mb-4">
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-accent-blue">Real-Time</span> Impact
+      </h2>
+      <p class="subtitle font-mono text-text-muted">Tracking our movement across San Francisco</p>
+    </div>
+
+    <div class="metrics-grid">
+      {impactMetrics.map((metric) => {
+        const colors = colorMap[metric.color as keyof typeof colorMap];
+        return (
+          <HoverLift>
+            <GlassCard variant="card" class={`metric-card p-6 md:p-8 h-full border-l-4 ${colors.border}`} data-metric={metric.id}>
+              <div class="flex justify-between items-start mb-4">
+                <div class={`metric-icon ${colors.text}`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={metricIcons[metric.id as keyof typeof metricIcons]} />
+                </div>
+                <div class={`metric-trend text-xs font-mono ${colors.text} ${colors.bg} px-2 py-1 rounded-full`}>
+                  {metric.trend}
+                </div>
+              </div>
+              <div class="metric-value text-4xl font-bold text-text-light font-mono mb-2" data-target={metric.value} data-prefix={metric.prefix || ''}>0</div>
+              <div class="metric-label text-sm text-text-muted uppercase tracking-wider">{metric.label}</div>
+            </GlassCard>
+          </HoverLift>
+        );
+      })}
+    </div>
+
+    <GlassCard variant="panel" class="p-6 md:p-12 relative overflow-hidden">
+      <!-- Background decoration -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-neon-400/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+      
+      <div class="insight-header flex items-center gap-3 mb-8 relative z-10">
+        <div class="p-2 rounded-full bg-neon-400/10 text-neon-400">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-text-light font-mono">AI-Driven Insights</h3>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6 relative z-10">
+        {insights.map((insight) => (
+          <div class="insight-item flex gap-4 items-start p-4 rounded-xl bg-white/5 border border-white/5">
+            <div class="text-2xl">{insight.icon}</div>
+            <p class="text-sm text-text-muted leading-relaxed">
+              {insight.content.pre && <span>{insight.content.pre} </span>}
+              <strong class="text-neon-400">{insight.content.highlight}</strong>
+              {insight.content.post && <span> {insight.content.post}</span>}
+            </p>
+          </div>
+        ))}
+      </div>
+    </GlassCard>
+
+  </div>
+</section>
+
+<style>
+  .section-header {
+    text-align: center;
+    margin-bottom: 5rem;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+</style>
+
+<script>
+  // Counter animation
+  function animateCounter(element: HTMLElement, target: number, duration = 2000, prefix = '') {
+    const start = 0;
+    const increment = target / (duration / 16);
+    let current = start;
+
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        current = target;
+        clearInterval(timer);
+      }
+
+      const formattedValue = prefix + Math.floor(current).toLocaleString();
+      if (element) {
+        element.textContent = formattedValue;
+      }
+    }, 16);
+  }
+
+  // Intersection Observer for animation trigger
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const cards = entry.target.querySelectorAll('.metric-card');
+        cards.forEach((card, index) => {
+          setTimeout(() => {
+            const valueElement = card.querySelector('.metric-value') as HTMLElement | null;
+            if (valueElement && valueElement.dataset.target) {
+              const target = parseInt(valueElement.dataset.target);
+              const prefix = valueElement.dataset.prefix || '';
+              animateCounter(valueElement, target, 2000, prefix);
+            }
+          }, index * 200); // Staggered delay
+        });
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  // Start observing
+  const dashboard = document.getElementById('impact-dashboard');
+  if (dashboard) {
+    observer.observe(dashboard);
+  }
+</script>

@@ -1,0 +1,128 @@
+---
+/**
+ * GlassCard Component
+ *
+ * Reusable glassmorphism card with 3-tier opacity system.
+ *
+ * PRD Requirements (Section 3.2 & 4.3):
+ * - panel: 90% opacity + 20px blur (articles, legal, long-form)
+ * - card: 40% opacity + 12px blur (service cards, team bios, scannable)
+ * - hud: 10% opacity + 5px blur (floating nav, concierge, context)
+ * - interactive: Adds hover lift and neon glow effect
+ *
+ * Usage:
+ * <GlassCard variant="panel">Long-form content</GlassCard>
+ * <GlassCard variant="card" interactive={true}>Service card</GlassCard>
+ * <GlassCard variant="hud">Floating UI element</GlassCard>
+ */
+
+interface Props {
+  variant?: 'panel' | 'card' | 'hud';
+  interactive?: boolean;
+  spotlight?: boolean;
+  class?: string;
+}
+
+const { variant = 'card', interactive = false, spotlight = true, class: className = '' } = Astro.props;
+
+// Determine variant-specific classes
+const variantClasses = {
+  panel: 'bg-glass-surface/90 backdrop-blur-xl border-glass-stroke/80',
+  card: 'bg-glass-surface/40 backdrop-blur-md border-glass-stroke',
+  hud: 'bg-glass-surface/10 backdrop-blur-xs border-glass-stroke/50',
+};
+
+const interactiveClasses = interactive
+  ? 'glass-card-interactive cursor-pointer'
+  : '';
+
+const spotlightClasses = spotlight ? 'glass-card-spotlight' : '';
+
+const baseClasses = `glass-card group relative rounded-xl border transition-all duration-500 ${variantClasses[variant]} ${interactiveClasses} ${spotlightClasses} ${className}`;
+---
+
+<div class={baseClasses}>
+  {spotlight && (
+    <div class="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+      <div class="spotlight-bg absolute inset-0 bg-gradient-to-r from-neon-400/10 via-accent-blue/10 to-neon-400/10 blur-xl"></div>
+    </div>
+  )}
+  
+  <div class="relative z-10 h-full overflow-hidden rounded-xl p-0.5">
+    <slot />
+  </div>
+
+  {spotlight && (
+    <div class="spotlight-border pointer-events-none absolute -inset-px z-0 rounded-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+  )}
+</div>
+
+<style>
+  .glass-card {
+    --mouse-x: 50%;
+    --mouse-y: 50%;
+  }
+  
+  /* Interactive Hover State - Refined Lift */
+  .glass-card-interactive:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+      0 10px 40px -10px rgba(0, 255, 148, 0.1),
+      0 0 20px -5px rgba(74, 144, 164, 0.1);
+    border-color: rgba(0, 255, 148, 0.2);
+  }
+
+  /* Spotlight Effect Logic */
+  .spotlight-bg {
+    background: radial-gradient(
+      800px circle at var(--mouse-x) var(--mouse-y),
+      rgba(0, 255, 148, 0.15),
+      transparent 40%
+    );
+  }
+
+  .spotlight-border {
+    background: radial-gradient(
+      400px circle at var(--mouse-x) var(--mouse-y),
+      rgba(0, 255, 148, 1),
+      transparent 40%
+    );
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    padding: 1.5px; /* Border width */
+  }
+  
+  /* Top shine */
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    pointer-events: none;
+    z-index: 20;
+  }
+</style>
+
+<script>
+  // Mouse tracking for spotlight effect
+  const cards = document.querySelectorAll('.glass-card-spotlight');
+  
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = (card as HTMLElement).getBoundingClientRect();
+      const x = (e as MouseEvent).clientX - rect.left;
+      const y = (e as MouseEvent).clientY - rect.top;
+      
+      (card as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
+      (card as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
+</script>

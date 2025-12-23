@@ -1,0 +1,67 @@
+---
+import Layout from '../components/layouts/Layout.astro';
+---
+
+<Layout title="Contact | AuralNet">
+  
+  <div class="min-h-screen flex flex-col justify-between pt-32 pb-16 px-8 md:px-16 max-w-[1400px] mx-auto">
+    
+    <!-- Header -->
+    <header class="border-b border-foreground/20 pb-8">
+      <div class="flex justify-between items-start">
+        <h1 class="text-xs font-mono uppercase tracking-widest text-muted-foreground">[ CONTACT / 003 ]</h1>
+        <div class="text-xs font-mono uppercase tracking-widest text-muted-foreground text-right hidden md:block">
+          Secure Channel<br/>
+          Encrypted
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col justify-center">
+      
+      <div class="max-w-4xl">
+        <h2 class="text-5xl md:text-8xl font-bold tracking-tighter mb-16 leading-[0.9]">
+          Initiate<br/>
+          Protocol.
+        </h2>
+
+        <div class="space-y-12">
+          
+          <div>
+            <p class="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-4">Target Address</p>
+            <a href="mailto:team@owly.ai" class="text-3xl md:text-6xl font-light hover:text-primary transition-colors border-b border-transparent hover:border-primary">
+              team@owly.ai
+            </a>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-12 pt-12 border-t border-foreground/10">
+            <div>
+              <p class="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-2">Subject: Research</p>
+              <p class="text-lg text-muted-foreground">For academic partnerships and benchmark methodology review.</p>
+            </div>
+            <div>
+              <p class="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-2">Subject: Access</p>
+              <p class="text-lg text-muted-foreground">For sovereign licensing and Diamond Protocol inquiries.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Footer Location -->
+    <footer class="pt-16 border-t border-foreground/10 flex justify-between items-end">
+      <div>
+        <p class="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-2">Physical Coordinates</p>
+        <p class="text-lg font-medium">San Francisco, CA</p>
+      </div>
+      <div class="text-right">
+        <p class="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-2">Response Time</p>
+        <p class="text-lg font-medium text-primary">< 24 Hours</p>
+      </div>
+    </footer>
+
+  </div>
+</Layout>

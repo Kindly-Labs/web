@@ -1,0 +1,33 @@
+---
+import Button from '../../ui/forms/Button.astro';
+import GlassCard from '../../ui/glass/GlassCard.astro';
+---
+
+<section class="relative py-32">
+  <div class="container mx-auto max-w-7xl px-6">
+    <GlassCard variant="panel" class="p-12 md:p-16 text-center relative overflow-hidden">
+      <!-- Decorative background elements -->
+      <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-neon-400/5 to-transparent pointer-events-none"></div>
+      <div class="absolute -top-20 -left-20 w-64 h-64 bg-neon-400/10 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-accent-blue/10 rounded-full blur-3xl"></div>
+
+      <div class="relative z-10 max-w-3xl mx-auto">
+        <h2 class="text-3xl md:text-5xl font-bold font-mono mb-6 leading-tight">
+          Empowering Our Community, <br/>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-secondary">One Dataset at a Time</span>
+        </h2>
+        
+        <p class="text-lg md:text-xl text-text-muted mb-10 leading-relaxed">
+          Our mission is simple: to provide a fair wage for the data that powers the future. We believe that by treating data as labor, we can create a more equitable and resilient local economy for everyone.
+        </p>
+        
+        <Button href="/about" variant="outline" size="lg">
+          Learn More About Our Mission
+        </Button>
+      </div>
+    </GlassCard>
+  </div>
+</section>
+
+<style>
+</style>

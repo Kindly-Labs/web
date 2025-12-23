@@ -1,0 +1,155 @@
+---
+import Layout from '../../components/layouts/Layout.astro';
+
+// Mock Data
+const datasets = [
+  { id: 'zh-toishan-v1', name: 'Toishanese Core', size: '12.4 GB', records: '14,200', status: 'Available' },
+  { id: 'zh-fuzhou-alpha', name: 'Fuzhounese Alpha', size: '2.1 GB', records: '2,100', status: 'Beta' },
+  { id: 'nan-hokkien-raw', name: 'Hokkien Raw', size: '45.0 GB', records: '55,000', status: 'Processing' },
+];
+
+const audits = [
+  { id: 'AUD-2025-001', model: 'GPT-4o', date: '2025-12-18', score: 'FAIL (42% WER)', status: 'Complete' },
+  { id: 'AUD-2025-002', model: 'Claude-3.5', date: '2025-12-19', score: 'FAIL (38% WER)', status: 'Complete' },
+];
+---
+
+<Layout title="Dashboard | AuralNet">
+  
+  <div class="min-h-screen pt-32 px-8 md:px-16 pb-16 max-w-[1400px] mx-auto">
+    
+    <!-- Dashboard Header -->
+    <header class="border-b border-foreground/20 pb-8 mb-12 flex justify-between items-end">
+      <div>
+        <h1 class="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-2">[ DASHBOARD ]</h1>
+        <div class="text-2xl font-mono">PARTNER_ID: <span class="text-primary">8821X</span></div>
+      </div>
+      <div class="text-right font-mono text-xs">
+        <div class="mb-1">API_QUOTA: <span class="text-green-500">UNLIMITED</span></div>
+        <div>REGION: US-WEST-2</div>
+      </div>
+    </header>
+
+    <div class="grid lg:grid-cols-3 gap-12">
+      
+      <!-- Left Column: Registry -->
+      <div class="lg:col-span-2 space-y-12">
+        
+        <!-- Datasets Table -->
+        <section>
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xs font-mono uppercase tracking-widest text-muted-foreground">Registry Access</h2>
+            <button class="text-xs font-mono text-primary hover:underline">REFRESH_LIST</button>
+          </div>
+          
+          <div class="border border-foreground/10">
+            <table class="w-full text-left text-sm font-mono">
+              <thead class="bg-foreground/5 text-muted-foreground">
+                <tr>
+                  <th class="p-4 font-normal">ID</th>
+                  <th class="p-4 font-normal">DATASET</th>
+                  <th class="p-4 font-normal">SIZE</th>
+                  <th class="p-4 font-normal">STATUS</th>
+                  <th class="p-4 font-normal text-right">ACTION</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-foreground/10">
+                {datasets.map(d => (
+                  <tr class="hover:bg-foreground/5 transition-colors">
+                    <td class="p-4 text-muted-foreground">{d.id}</td>
+                    <td class="p-4 font-bold">{d.name}</td>
+                    <td class="p-4">{d.size}</td>
+                    <td class="p-4">
+                      <span class={`px-2 py-0.5 text-xs ${
+                        d.status === 'Available' ? 'bg-green-500/10 text-green-500' : 
+                        d.status === 'Beta' ? 'bg-yellow-500/10 text-yellow-500' : 'text-muted-foreground'
+                      }`}>
+                        {d.status}
+                      </span>
+                    </td>
+                    <td class="p-4 text-right">
+                      {d.status !== 'Processing' ? (
+                        <a href="#" class="text-primary hover:underline">DOWNLOAD_JSONL</a>
+                      ) : (
+                        <span class="text-muted-foreground opacity-50">LOCKED</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Audit Logs -->
+        <section>
+          <h2 class="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-6">Audit Logs</h2>
+          <div class="border border-foreground/10">
+            {audits.map(a => (
+              <div class="p-4 border-b border-foreground/10 last:border-0 flex justify-between items-center hover:bg-foreground/5 font-mono text-sm">
+                <div class="flex gap-8">
+                  <span class="text-muted-foreground">{a.date}</span>
+                  <span class="font-bold">{a.id}</span>
+                  <span>{a.model}</span>
+                </div>
+                <div class="flex gap-8 items-center">
+                  <span class="text-red-500 bg-red-500/10 px-2 py-0.5 text-xs">{a.score}</span>
+                  <a href="#" class="text-muted-foreground hover:text-foreground">VIEW_REPORT</a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Right Column: System Status & API -->
+      <div class="space-y-12">
+        
+        <!-- API Keys -->
+        <section class="border border-foreground/10 p-6 bg-foreground/5">
+          <h2 class="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-6">API Configuration</h2>
+          
+          <div class="mb-6">
+            <label class="block text-xs font-mono text-muted-foreground mb-2">PUBLIC_KEY</label>
+            <div class="bg-background border border-foreground/10 p-3 font-mono text-xs overflow-hidden text-ellipsis">
+              pk_live_51Mz...Xy9a
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-mono text-muted-foreground mb-2">SECRET_KEY</label>
+            <div class="bg-background border border-foreground/10 p-3 font-mono text-xs flex justify-between items-center group cursor-pointer hover:border-primary transition-colors">
+              <span>sk_live_....................</span>
+              <span class="text-primary opacity-0 group-hover:opacity-100">COPY</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Diamond Protocol Status -->
+        <section class="border border-foreground/10 p-6 relative overflow-hidden">
+          <div class="absolute top-0 right-0 bg-primary/20 text-primary text-[10px] font-mono px-2 py-1">LEVEL 3</div>
+          <h2 class="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-6">Diamond Protocol</h2>
+          
+          <div class="space-y-4">
+            <div class="flex justify-between text-sm font-mono">
+              <span class="text-muted-foreground">Vault Status</span>
+              <span class="text-green-500">LOCKED</span>
+            </div>
+            <div class="flex justify-between text-sm font-mono">
+              <span class="text-muted-foreground">Last Audit</span>
+              <span>24h ago</span>
+            </div>
+            <div class="w-full bg-foreground/10 h-1 mt-4">
+              <div class="bg-primary h-full w-[2%]"></div>
+            </div>
+            <p class="text-[10px] text-muted-foreground font-mono text-right">0.02% Data Leakage Risk</p>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+
+  </div>
+</Layout>

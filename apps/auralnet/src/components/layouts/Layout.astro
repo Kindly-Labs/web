@@ -1,0 +1,115 @@
+---
+import '../../styles/tailwind.css';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="antialiased scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="The Rosetta Stone for the AI Era." />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="https://rsms.me/ibm-plex-mono/ibm-plex-mono.css">
+  </head>
+  <body class="min-h-screen bg-background text-foreground font-sans selection:bg-primary/30">
+    
+    <!-- HUD: Top Left (Brand) -->
+    <a href="/" class="fixed top-8 left-8 z-50 font-mono text-sm tracking-widest hover:text-primary transition-colors mix-blend-difference text-white">
+      [ AURALNET ]
+    </a>
+
+    <!-- HUD: Top Right (Portal) -->
+    <a href="/portal" class="fixed top-8 right-8 z-50 font-mono text-sm tracking-widest hover:text-primary transition-colors mix-blend-difference text-white flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+      PORTAL
+    </a>
+
+    <!-- HUD: Bottom Left (Status) -->
+    <div class="fixed bottom-8 left-8 z-50 font-mono text-[10px] text-muted-foreground tracking-widest hidden md:block mix-blend-difference">
+      <div>SYS: ONLINE</div>
+      <div>LOC: 37.7749° N, 122.4194° W</div>
+    </div>
+
+    <!-- HUD: Bottom Right (Menu Trigger) -->
+    <button id="menu-trigger" class="fixed bottom-8 right-8 z-50 font-mono text-sm tracking-widest hover:text-primary transition-colors mix-blend-difference text-white">
+      MENU +
+    </button>
+
+    <!-- Full Screen Menu Overlay -->
+    <div id="menu-overlay" class="fixed inset-0 bg-black z-40 transform translate-y-full transition-transform duration-500 ease-[cubic-bezier(0.87,0,0.13,1)] flex items-center justify-center">
+      
+      <!-- Menu Content -->
+      <nav class="flex flex-col items-center gap-8">
+        <a href="/research" class="menu-link text-5xl md:text-7xl font-bold hover:text-primary transition-colors">
+          <span class="text-xs font-mono block mb-2 text-muted-foreground tracking-widest">01</span>
+          Research
+        </a>
+        <a href="/portal/enterprise" class="menu-link text-5xl md:text-7xl font-bold hover:text-primary transition-colors">
+          <span class="text-xs font-mono block mb-2 text-muted-foreground tracking-widest">02</span>
+          Enterprise
+        </a>
+        <a href="/about" class="menu-link text-5xl md:text-7xl font-bold hover:text-primary transition-colors">
+          <span class="text-xs font-mono block mb-2 text-muted-foreground tracking-widest">03</span>
+          About
+        </a>
+        <a href="/contact" class="menu-link text-5xl md:text-7xl font-bold hover:text-primary transition-colors">
+          <span class="text-xs font-mono block mb-2 text-muted-foreground tracking-widest">04</span>
+          Contact
+        </a>
+
+      </nav>
+
+    </div>
+
+    <!-- Main Content -->
+    <main class="w-full">
+      <slot />
+    </main>
+
+  </body>
+</html>
+
+<script>
+  const trigger = document.getElementById('menu-trigger');
+  const overlay = document.getElementById('menu-overlay');
+  let isOpen = false;
+
+  trigger?.addEventListener('click', () => {
+    isOpen = !isOpen;
+    if (isOpen) {
+      overlay?.classList.remove('translate-y-full');
+      trigger.textContent = 'CLOSE -';
+    } else {
+      overlay?.classList.add('translate-y-full');
+      trigger.textContent = 'MENU +';
+    }
+  });
+
+  // Close menu on link click
+  document.querySelectorAll('.menu-link').forEach(link => {
+    link.addEventListener('click', () => {
+      isOpen = false;
+      overlay?.classList.add('translate-y-full');
+      trigger!.textContent = 'MENU +';
+    });
+  });
+</script>
+
+<style is:global>
+  :root {
+    font-family: 'Inter', sans-serif;
+  }
+  .font-mono {
+    font-family: 'IBM Plex Mono', monospace;
+  }
+</style>

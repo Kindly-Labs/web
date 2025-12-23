@@ -1,0 +1,74 @@
+---
+import Layout from '../components/layouts/Layout.astro';
+---
+
+<Layout title="Terms of Service | Owly Labs">
+  <section class="relative z-10 pt-32 pb-24">
+    <div class="container mx-auto px-6 max-w-3xl">
+      
+      <div class="glass-panel p-8 md:p-12">
+        <h1 class="text-3xl md:text-4xl font-bold text-foreground mb-2">
+          Terms of Service
+        </h1>
+        <p class="text-sm text-muted-foreground mb-8">
+          Effective Date: December 16, 2025
+        </p>
+        
+        <div class="prose prose-invert max-w-none space-y-6 text-muted-foreground">
+          
+          <p class="text-foreground text-lg">
+            Welcome to Owly Labs. By using our website, Voice Passport, or Aether Voice OS, you agree to these terms.
+          </p>
+
+          <h3 class="text-xl font-bold text-foreground mt-8 mb-3">1. The Voice Passport License</h3>
+          <p>
+            When you contribute voice data to the Owly Labs Archive ("Contribution"):
+          </p>
+          <ul class="list-disc list-inside space-y-2">
+            <li><strong class="text-foreground">You Retain Ownership:</strong> You own the copyright to your original voice recordings.</li>
+            <li><strong class="text-foreground">License to Us:</strong> You grant Owly Labs a perpetual, irrevocable license to use your Contribution to train AI models, specifically for the purpose of heritage preservation and dialect understanding.</li>
+            <li><strong class="text-foreground">Benefit:</strong> In exchange for your Contribution, you receive a non-transferable, lifetime right to access the "Aether Voice OS" Basic Tier at no cost.</li>
+          </ul>
+
+          <h3 class="text-xl font-bold text-foreground mt-8 mb-3">2. We Don't Clone Voices</h3>
+          <div class="p-4 rounded-xl bg-primary/10 border border-primary/20 my-4">
+            <p class="text-foreground font-medium mb-2">
+              Your recordings train AI to <em>listen</em> and <em>understand</em> your dialect — not to speak as you.
+            </p>
+            <p class="text-sm">
+              We never build voice synthesis (TTS) models from individual contributors. Your voice cannot be used to impersonate you.
+            </p>
+          </div>
+          <ul class="list-disc list-inside space-y-2">
+            <li><strong class="text-foreground">No Voice Synthesis:</strong> We do not create text-to-speech models from individual voice samples.</li>
+            <li><strong class="text-foreground">Understanding Only:</strong> Your voice trains speech recognition and dialect understanding, not voice replication.</li>
+            <li><strong class="text-foreground">Aggregated Data:</strong> B2B partners only receive model outputs and APIs — never raw audio files.</li>
+          </ul>
+
+          <h3 class="text-xl font-bold text-foreground mt-8 mb-3">3. Privacy & Heritage Data</h3>
+          <p>
+            We treat dialect data as sensitive heritage information. We do not sell raw voice recordings to third-party data brokers. We only monetize the <em>intelligence</em> derived from aggregated data (e.g., the ability for an AI to understand Toishanese).
+          </p>
+
+          <h3 class="text-xl font-bold text-foreground mt-8 mb-3">4. Acceptable Use</h3>
+          <p>
+            You agree not to use our services to:
+          </p>
+          <ul class="list-disc list-inside space-y-2">
+            <li>Generate deepfakes or non-consensual voice clones.</li>
+            <li>Upload recordings of others without their explicit permission.</li>
+            <li>Impersonate others or commit fraud using AI-generated content.</li>
+            <li>Harass, bully, or discriminate against any community.</li>
+          </ul>
+
+          <h3 class="text-xl font-bold text-foreground mt-8 mb-3">5. Disclaimer</h3>
+          <p class="uppercase text-xs">
+            THE SERVICES ARE PROVIDED "AS IS". OWLY LABS MAKES NO WARRANTIES, EXPRESSED OR IMPLIED, AND HEREBY DISCLAIMS AND NEGATES ALL OTHER WARRANTIES.
+          </p>
+          
+        </div>
+      </div>
+      
+    </div>
+  </section>
+</Layout>

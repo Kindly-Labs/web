@@ -1,0 +1,154 @@
+---
+interface Props {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'glass';
+  size?: 'sm' | 'base' | 'lg';
+  href?: string;
+  className?: string;
+  target?: string;
+  rel?: string;
+  type?: 'button' | 'submit' | 'reset';
+  'aria-label'?: string;
+}
+
+const { 
+  variant = 'primary', 
+  size = 'base', 
+  href, 
+  className, 
+  target, 
+  rel, 
+  type = 'button',
+  'aria-label': ariaLabel 
+} = Astro.props;
+
+const sizeClasses = {
+  sm: 'px-4 py-2 text-sm',
+  base: 'px-6 py-3 text-base',
+  lg: 'px-8 py-4 text-lg',
+};
+
+const variantClasses = {
+  primary: 'btn-primary',
+  secondary: 'btn-secondary',
+  outline: 'btn-outline',
+  ghost: 'btn-ghost',
+  glass: 'btn-glass',
+};
+
+const classes = [
+  'btn-base',
+  sizeClasses[size],
+  variantClasses[variant],
+  className,
+]
+  .filter(Boolean)
+  .join(' ');
+---
+
+{href ? (
+  <a href={href} class={classes} target={target} rel={rel} aria-label={ariaLabel}>
+    <slot />
+  </a>
+) : (
+  <button type={type} class={classes} aria-label={ariaLabel}>
+    <slot />
+  </button>
+)}
+
+<style>
+  .btn-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-family-heading); /* Match site typography */
+    font-weight: 700;
+    border-radius: 9999px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth organic transition */
+    cursor: pointer;
+    text-decoration: none;
+    line-height: 1;
+    outline: none;
+    border: 2px solid transparent;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Focus Styles */
+  .btn-base:focus-visible {
+    box-shadow: 0 0 0 3px var(--color-primary-dark), 0 0 0 5px var(--color-accent);
+  }
+
+  /* Primary: Concierge Gradient (Orange to Green) */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 100%);
+    color: var(--color-primary-dark);
+    box-shadow: 0 4px 15px rgba(124, 179, 66, 0.3); /* Organic green/orange glow */
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(124, 179, 66, 0.5);
+    background: linear-gradient(135deg, var(--color-secondary-light) 0%, var(--color-accent) 100%);
+  }
+
+  /* Secondary: Fresh Leaf Green Gradient */
+  .btn-secondary {
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary-light) 100%);
+    color: var(--color-primary-dark);
+    box-shadow: 0 4px 15px rgba(124, 179, 66, 0.3); /* Green glow */
+  }
+
+  .btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(124, 179, 66, 0.5);
+    background: linear-gradient(135deg, #8DC452 0%, var(--color-accent) 100%);
+  }
+
+  /* Outline: Frosted Glass Effect */
+  .btn-outline {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .btn-outline:hover {
+    background: var(--color-accent);
+    color: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(124, 179, 66, 0.4); /* Green glow on hover */
+    border-color: var(--color-accent);
+  }
+
+  /* Glass: Concierge Prompt Chip Style */
+  .btn-glass {
+    background: rgba(124, 179, 66, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-color: rgba(124, 179, 66, 0.3);
+    color: var(--color-text-light);
+  }
+
+  .btn-glass:hover {
+    background: rgba(124, 179, 66, 0.2);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(124, 179, 66, 0.2);
+  }
+
+  /* Ghost: Minimalist */
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-text-light);
+  }
+
+  .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-accent);
+    backdrop-filter: blur(4px);
+  }
+</style>

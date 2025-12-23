@@ -1,0 +1,94 @@
+---
+// Heritage Section - Showcasing dialect preservation stories
+import GlassCard from '../../ui/glass/GlassCard.astro';
+import HoverLift from '../../ui/effects/HoverLift.astro';
+import Button from '../../ui/forms/Button.astro';
+
+const heritageStories = [
+  {
+    dialect: "Toishanese",
+    community: "San Francisco Chinatown",
+    story: "Helping grandmothers check Muni bus times in their native dialect—preserving a language spoken by fewer than 1 million people worldwide.",
+    impact: "Daily Voice Access",
+    icon: "🚌",
+    color: "neon-400"
+  },
+  {
+    dialect: "Your Dialect",
+    community: "Your Community",
+    story: "Every dialect tells a story. Every accent carries history. Join us in preserving the linguistic diversity that makes humanity extraordinary.",
+    impact: "Join the Movement",
+    icon: "🌍",
+    color: "accent-blue"
+  }
+];
+
+const colorMap = {
+  'neon-400': {
+    border: 'border-neon-400',
+    iconBg: 'bg-neon-400/10',
+    iconText: 'text-neon-400',
+    accentText: 'text-neon-400'
+  },
+  'accent-blue': {
+    border: 'border-accent-blue',
+    iconBg: 'bg-accent-blue/10',
+    iconText: 'text-accent-blue',
+    accentText: 'text-accent-blue'
+  }
+};
+---
+
+<section id="heritage" class="relative py-32 bg-gradient-to-b from-transparent to-forest-900/30">
+  <div class="container mx-auto max-w-7xl px-6 relative z-10">
+    <div class="max-w-4xl mx-auto text-center mb-16">
+      <div class="inline-block px-4 py-1 rounded-full bg-neon-400/10 border border-neon-400/20 text-neon-400 font-mono text-xs font-bold uppercase tracking-widest mb-6">
+        Heritage in Action
+      </div>
+      <h2 class="text-4xl md:text-5xl font-bold font-mono mb-6">
+        Real <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-400 to-accent-blue">Dialects</span>, Real Impact
+      </h2>
+      <p class="text-xl text-text-muted leading-relaxed">
+        From pilot projects to global movements—see how we're bringing dialects online and preserving cultural heritage through voice technology.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+      {heritageStories.map(story => {
+        const colors = colorMap[story.color as keyof typeof colorMap];
+        return (
+          <HoverLift>
+            <GlassCard variant="card" class={`p-8 h-full border-l-4 ${colors.border}`}>
+              <div class="flex items-start gap-4 mb-6">
+                <div class={`text-5xl ${colors.iconText}`}>{story.icon}</div>
+                <div class="flex-1">
+                  <h3 class="text-2xl font-bold font-mono text-text-light mb-2">{story.dialect}</h3>
+                  <p class={`font-mono text-sm ${colors.accentText}`}>{story.community}</p>
+                </div>
+              </div>
+              <p class="text-text-muted leading-relaxed mb-6">
+                {story.story}
+              </p>
+              <div class={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${colors.iconBg} ${colors.iconText} font-mono text-sm font-bold`}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                {story.impact}
+              </div>
+            </GlassCard>
+          </HoverLift>
+        );
+      })}
+    </div>
+
+    <div class="text-center">
+      <Button href="/contribute" variant="primary" size="lg" className="shadow-lg shadow-neon-400/20">
+        Preserve Your Heritage
+      </Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Additional heritage section specific styles if needed */
+</style>

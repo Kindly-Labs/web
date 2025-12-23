@@ -1,0 +1,73 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+.next/
+.astro/
+out/
+build/
+coverage/
+.turbo/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+*.pid
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+
+# Go
+*.exe
+vendor/
+# Go binaries (built artifacts)
+services/owly-api/main
+services/owly-api/owly-server
+services/owly-api/cmd/*/main
+
+# GTFS transit data (large, download separately)
+services/owly-api/data/gtfs/
+
+# ML/Data artifacts (keep out of repo)
+*.safetensors
+*.onnx
+*.wav
+*.mp3
+*.bin
+*.pt
+*.pth
+models/
+checkpoints/
+
+# Generated files
+*.min.js
+*.min.css
+*.map
+
+# Test artifacts
+playwright-report/
+test-results/
+
+# Temporary files
+tmp/
+temp/
+*.tmp

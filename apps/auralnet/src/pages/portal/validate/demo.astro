@@ -1,0 +1,136 @@
+---
+import PortalLayout from '../../../layouts/PortalLayout.astro';
+import Button from '../../../components/ui/Button.astro';
+---
+
+<PortalLayout title="Owly Portal | Validation Workbench">
+
+    <div class="max-w-6xl mx-auto h-[calc(100vh-8rem)] flex flex-col">
+        
+        <!-- Task Header -->
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">Toishanese Toxicity</span>
+                    <span class="text-xs text-gray-400">Task ID: #39281</span>
+                </div>
+                <h2 class="text-xl font-bold text-gray-900">Verify Audio Transcription & Intent</h2>
+            </div>
+            <div class="flex gap-3">
+                <button class="px-4 py-2 bg-white border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-50">Skip</button>
+                <button class="px-4 py-2 bg-red-600 text-white rounded text-sm font-medium hover:bg-red-700">Reject Data</button>
+                <button class="px-4 py-2 bg-green-600 text-white rounded text-sm font-medium hover:bg-green-700">Approve & Next</button>
+            </div>
+        </div>
+
+        <!-- Workbench Grid -->
+        <div class="grid grid-cols-12 gap-8 flex-1 overflow-hidden">
+            
+            <!-- LEFT: Source Media -->
+            <div class="col-span-12 md:col-span-5 flex flex-col gap-6">
+                <!-- Audio Player Card -->
+                <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Source Audio</h3>
+                    
+                    <div class="bg-gray-100 rounded-md p-4 flex items-center justify-center h-32 mb-4">
+                        <!-- Mock Waveform -->
+                        <div class="flex items-center gap-1 h-12">
+                            <div class="w-1 h-4 bg-purple-400 rounded-full"></div>
+                            <div class="w-1 h-8 bg-purple-500 rounded-full"></div>
+                            <div class="w-1 h-6 bg-purple-400 rounded-full"></div>
+                            <div class="w-1 h-10 bg-purple-600 rounded-full"></div>
+                            <div class="w-1 h-12 bg-purple-600 rounded-full"></div>
+                            <div class="w-1 h-5 bg-purple-400 rounded-full"></div>
+                            <div class="w-1 h-3 bg-purple-300 rounded-full"></div>
+                            <div class="w-1 h-8 bg-purple-500 rounded-full"></div>
+                            <div class="w-1 h-12 bg-purple-600 rounded-full"></div>
+                            <div class="w-1 h-4 bg-purple-400 rounded-full"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs text-gray-500 font-mono">
+                        <span>0:00</span>
+                        <span>0:14</span>
+                    </div>
+                </div>
+
+                <!-- Metadata Card -->
+                <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm flex-1">
+                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">Metadata</h3>
+                    <dl class="space-y-4 text-sm">
+                        <div class="flex justify-between">
+                            <dt class="text-gray-500">Contributor ID</dt>
+                            <dd class="font-mono text-gray-900">usr_8921_beta</dd>
+                        </div>
+                         <div class="flex justify-between">
+                            <dt class="text-gray-500">Dialect</dt>
+                            <dd class="font-mono text-gray-900">zh-toishan</dd>
+                        </div>
+                         <div class="flex justify-between">
+                            <dt class="text-gray-500">App Context</dt>
+                            <dd class="font-mono text-gray-900">Muni Bus Query</dd>
+                        </div>
+                        <div class="border-t border-gray-100 pt-4">
+                            <dt class="text-gray-500 mb-1">Aether Analysis</dt>
+                            <dd class="p-2 bg-gray-50 rounded text-xs text-gray-600 leading-relaxed border border-gray-100">
+                                "High confidence in 'Bus 38' intent. Slight frustration detected in tonal variance. Recommended for Toxicity Check due to loud volume."
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- RIGHT: Annotation/Output -->
+            <div class="col-span-12 md:col-span-7 bg-white p-6 rounded-lg border border-gray-200 shadow-sm flex flex-col h-full overflow-y-auto">
+                <div class="space-y-8">
+                     <!-- Transcript Field -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Transcript (Toishanese)</label>
+                        <textarea rows="3" class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 text-lg font-medium font-serif p-3 border" placeholder="Type what you hear...">Wait! 38 bus... did it leave already?</textarea>
+                        <p class="mt-1 text-xs text-gray-500">Please include stutters and pauses.</p>
+                    </div>
+
+                    <!-- Translation Field -->
+                    <div>
+                         <label class="block text-sm font-medium text-gray-700 mb-2">English Translation</label>
+                        <textarea rows="2" class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 text-base p-3 border">Wait! Did the 38 bus already leave?</textarea>
+                    </div>
+
+                    <div class="border-t border-gray-200 my-6"></div>
+
+                    <!-- Classification -->
+                    <div>
+                        <span class="block text-sm font-medium text-gray-700 mb-4">Toxicity Classification</span>
+                        
+                        <div class="space-y-3">
+                            <label class="flex items-start p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer">
+                                <input name="toxicity" type="radio" class="mt-1 h-4 w-4 text-purple-600 border-gray-300 focus:ring-purple-500">
+                                <span class="ml-3">
+                                    <span class="block text-sm font-medium text-gray-900">Non-Toxic</span>
+                                    <span class="block text-xs text-gray-500">Neutral query or statement.</span>
+                                </span>
+                            </label>
+
+                            <label class="flex items-start p-3 border border-purple-200 bg-purple-50 rounded-md cursor-pointer ring-1 ring-purple-500">
+                                <input name="toxicity" type="radio" class="mt-1 h-4 w-4 text-purple-600 border-gray-300 focus:ring-purple-500" checked>
+                                <span class="ml-3">
+                                    <span class="block text-sm font-medium text-purple-900">Non-Toxic with Frustration</span>
+                                    <span class="block text-xs text-purple-700">Valid query but expressed with impatience/anger.</span>
+                                </span>
+                            </label>
+                             <label class="flex items-start p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer">
+                                <input name="toxicity" type="radio" class="mt-1 h-4 w-4 text-purple-600 border-gray-300 focus:ring-purple-500">
+                                <span class="ml-3">
+                                    <span class="block text-sm font-medium text-gray-900">Toxic/Abusive</span>
+                                    <span class="block text-xs text-gray-500">Contains slurs, thirsts, or harassment.</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</PortalLayout>

@@ -1,0 +1,286 @@
+@import 'tailwindcss';
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* iOS 26 Theme: "Holographic Midnight" */
+  --radius: 1.5rem; /* Super rounded */
+
+  /* Base Colors - Deep Ocean Teal */
+  --background: oklch(0.12 0.045 168);
+  --foreground: oklch(0.98 0.01 240);
+
+  /* Glass Panels */
+  --card: oklch(0.1 0.03 260 / 0.4);
+  --card-foreground: oklch(0.98 0.01 240);
+
+  --popover: oklch(0.1 0.03 260 / 0.6);
+  --popover-foreground: oklch(0.98 0.01 240);
+
+  /* Accents - Electric Cyan & Neon Purple */
+  --primary: oklch(0.6 0.2 230); /* Cyan */
+  --primary-foreground: oklch(0.98 0.01 240);
+
+  --secondary: oklch(0.2 0.05 280); /* Deep Purple */
+  --secondary-foreground: oklch(0.9 0.05 280);
+
+  --muted: oklch(0.2 0.02 260);
+  --muted-foreground: oklch(0.7 0.05 260);
+
+  --accent: oklch(0.3 0.1 230);
+  --accent-foreground: oklch(0.98 0.01 240);
+
+  --destructive: oklch(0.6 0.2 20);
+
+  --border: oklch(1 0 0 / 0.08); /* Extremely subtle border */
+  --input: oklch(1 0 0 / 0.08);
+  --ring: oklch(0.6 0.2 230 / 0.5);
+
+  /* Charts/Data */
+  --chart-1: oklch(0.6 0.2 230);
+  --chart-2: oklch(0.5 0.2 280);
+  --chart-3: oklch(0.7 0.15 180);
+  --chart-4: oklch(0.8 0.1 320);
+  --chart-5: oklch(0.9 0.05 60);
+
+  /* Sidebar */
+  --sidebar: oklch(0.08 0.02 260);
+  --sidebar-foreground: oklch(0.9 0.01 240);
+  --sidebar-primary: oklch(0.6 0.2 230);
+  --sidebar-primary-foreground: oklch(0.98 0.01 240);
+  --sidebar-accent: oklch(0.15 0.03 260);
+  --sidebar-accent-foreground: oklch(0.9 0.01 240);
+  --sidebar-border: oklch(1 0 0 / 0.05);
+  --sidebar-ring: oklch(0.6 0.2 230 / 0.5);
+
+  /* === AETHER DESIGN TOKENS === */
+
+  /* Animation Timing Scale */
+  --aether-duration-instant: 75ms;
+  --aether-duration-fast: 150ms;
+  --aether-duration-normal: 300ms;
+  --aether-duration-slow: 500ms;
+  --aether-duration-emphasis: 700ms;
+
+  /* Easing Functions */
+  --aether-ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --aether-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Border Opacity Scale */
+  --aether-border-subtle: rgba(52, 211, 153, 0.08);
+  --aether-border-default: rgba(52, 211, 153, 0.12);
+  --aether-border-hover: rgba(52, 211, 153, 0.25);
+}
+
+@theme {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+  /* Deep Ocean: Rich teal/emerald gradient */
+  background: linear-gradient(
+    180deg,
+    oklch(0.2 0.05 170) 0%,
+    oklch(0.14 0.045 168) 50%,
+    oklch(0.1 0.04 165) 100%
+  );
+}
+
+/* ========== SAFE AREA UTILITIES ========== */
+@layer utilities {
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .pl-safe {
+    padding-left: env(safe-area-inset-left);
+  }
+  .pr-safe {
+    padding-right: env(safe-area-inset-right);
+  }
+  .h-safe {
+    height: env(safe-area-inset-top);
+  }
+  .h-safe-bottom {
+    height: env(safe-area-inset-bottom);
+  }
+  .min-h-screen-safe {
+    min-height: 100dvh;
+  }
+}
+
+/* ========== GLASSMORPHISM 3.0 ========== */
+
+.glass-panel {
+  @apply relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-xl backdrop-blur-3xl transition-all duration-300;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    0 0 40px rgba(16, 185, 129, 0.06),
+    inset 0 1px 1px rgba(52, 211, 153, 0.08); /* Inner emerald highlight */
+}
+
+/* Glossy Shine Effect */
+.glass-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.8s ease;
+  pointer-events: none;
+}
+
+.glass-panel:hover::after {
+  transform: translateX(100%);
+}
+
+/* Aether-themed glass panel */
+.glass-aether {
+  @apply rounded-2xl border backdrop-blur-xl;
+  background: linear-gradient(
+    to bottom right,
+    oklch(0.16 0.05 168 / 0.6),
+    oklch(0.12 0.045 172 / 0.5)
+  );
+  border-color: var(--aether-border-default);
+  box-shadow:
+    0 0 40px rgba(16, 185, 129, 0.1),
+    0 0 80px rgba(20, 184, 166, 0.06),
+    inset 0 1px 1px rgba(52, 211, 153, 0.12);
+}
+
+.glass-aether-subtle {
+  @apply rounded-2xl border backdrop-blur-xl;
+  background: linear-gradient(
+    to bottom right,
+    oklch(0.12 0.03 160 / 0.3),
+    oklch(0.1 0.03 180 / 0.2)
+  );
+  border-color: var(--aether-border-subtle);
+}
+
+/* ========== BUTTONS ========== */
+
+.btn-primary {
+  @apply rounded-full border border-white/20 bg-white/10 px-6 py-3 font-medium tracking-wide text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white/20 hover:shadow-cyan-500/20 active:scale-95;
+}
+
+.text-glow {
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+/* ========== SCROLLBAR ========== */
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+/* ========== ANIMATIONS ========== */
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.03);
+    opacity: 1;
+  }
+}
+
+@keyframes floatSmooth {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@layer utilities {
+  .animate-breathe {
+    animation: breathe 4s ease-in-out infinite;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

@@ -1,0 +1,66 @@
+---
+interface Props {
+  name: string;
+  id: string;
+  required?: boolean;
+  className?: string;
+  options: { value: string; label: string }[];
+}
+
+const { name, id, required = false, className = '', options } = Astro.props;
+---
+
+<select
+  name={name}
+  id={id}
+  required={required}
+  class:list={['select', className]}
+>
+  {options.map(option => (
+    <option value={option.value}>{option.label}</option>
+  ))}
+</select>
+
+<style>
+  .select {
+    width: 100%;
+    padding: var(--spacing-4);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 2px solid var(--color-border-light);
+    border-radius: var(--border-radius-base);
+    color: var(--color-text-light);
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237CB342' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--spacing-4) center;
+    padding-right: calc(var(--spacing-4) * 2.5);
+  }
+
+  .select option {
+    background: var(--color-primary);
+    color: var(--color-text-light);
+    padding: var(--spacing-2);
+  }
+
+  .select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(124, 179, 66, 0.2);
+  }
+
+  .select:hover:not(:focus) {
+    border-color: rgba(124, 179, 66, 0.4);
+  }
+
+  .select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+</style>

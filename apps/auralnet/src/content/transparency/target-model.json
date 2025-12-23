@@ -1,0 +1,14 @@
+{
+  "title": "Target Budget Allocation Model",
+  "year": 2025,
+  "category": "Financial",
+  "description": "Our projected efficiency model outlines how every dollar will be allocated to maximize community impact once funding is secured.",
+  "financials": {
+    "programs": 50,
+    "operations": 15,
+    "staffing": 25,
+    "fundraising": 0,
+    "technology": 10
+  },
+  "lastUpdated": "2025-01-01"
+}

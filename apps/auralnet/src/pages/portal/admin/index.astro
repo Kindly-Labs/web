@@ -1,0 +1,123 @@
+---
+import PortalLayout from '../../../layouts/PortalLayout.astro';
+import { DIALECTS, APPLICATIONS, DEMO_USERS } from '../../../data/portal-data';
+
+// Calculate stats
+const totalExperts = DEMO_USERS.filter(u => u.role === 'expert').length;
+const pendingApps = APPLICATIONS.filter(a => a.status === 'pending').length;
+const totalSamples = DIALECTS.reduce((sum, d) => sum + d.completedSamples, 0);
+const totalTarget = DIALECTS.reduce((sum, d) => sum + d.targetSamples, 0);
+---
+
+<PortalLayout title="Owly Portal | Admin Dashboard" activeNav="admin-home">
+    
+    <!-- Welcome Banner -->
+    <div class="glass-panel p-6 mb-8 bg-gradient-to-r from-primary/10 to-transparent">
+        <h2 class="text-xl font-bold text-foreground mb-1">👑 Owly Admin Dashboard</h2>
+        <p class="text-sm text-muted-foreground">Manage dialects, review applications, and oversee the data pipeline.</p>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="glass-panel p-6">
+            <dt class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Active Dialects</dt>
+            <dd class="mt-2 text-3xl font-bold text-foreground">{DIALECTS.length}</dd>
+        </div>
+        <div class="glass-panel p-6">
+            <dt class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Total Samples</dt>
+            <dd class="mt-2 text-3xl font-bold text-primary">{totalSamples} / {totalTarget}</dd>
+        </div>
+        <div class="glass-panel p-6">
+            <dt class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Active Experts</dt>
+            <dd class="mt-2 text-3xl font-bold text-foreground">{totalExperts}</dd>
+        </div>
+        <div class="glass-panel p-6">
+            <dt class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Pending Applications</dt>
+            <dd class="mt-2 text-3xl font-bold text-yellow-400">{pendingApps}</dd>
+        </div>
+    </div>
+
+    <!-- Dialects Table -->
+    <div class="glass-panel overflow-hidden mb-8">
+        <div class="px-6 py-4 border-b border-white/10 flex justify-between items-center">
+            <h2 class="text-lg font-bold text-foreground">All Dialects</h2>
+            <a href="/portal/admin/dialects" class="btn-primary text-xs px-4 py-2">+ Create Dialect</a>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead class="bg-white/5">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Dialect</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Region</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Progress</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5">
+                    {DIALECTS.map((dialect) => {
+                        const progress = Math.round((dialect.completedSamples / dialect.targetSamples) * 100);
+                        return (
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm font-medium text-foreground">{dialect.name}</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm text-muted-foreground">{dialect.region}</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex-1 h-2 bg-white/10 rounded-full overflow-hidden max-w-[100px]">
+                                            <div class="h-full bg-primary rounded-full" style={`width: ${progress}%`}></div>
+                                        </div>
+                                        <span class="text-xs text-muted-foreground">{dialect.completedSamples}/{dialect.targetSamples}</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class={`px-2 py-1 text-xs font-medium rounded-full ${
+                                        dialect.status === 'active' ? 'bg-green-500/20 text-green-400' : 
+                                        dialect.status === 'pilot' ? 'bg-yellow-500/20 text-yellow-400' :
+                                        'bg-white/10 text-muted-foreground'
+                                    }`}>
+                                        {dialect.status}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right">
+                                    <a href={`/portal/dialect/${dialect.id}`} class="text-primary text-sm hover:underline">View →</a>
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Recent Applications -->
+    <div class="glass-panel overflow-hidden">
+        <div class="px-6 py-4 border-b border-white/10 flex justify-between items-center">
+            <h2 class="text-lg font-bold text-foreground">Recent Expert Applications</h2>
+            <a href="/portal/admin/applicants" class="text-primary text-sm hover:underline">View all →</a>
+        </div>
+        <div class="divide-y divide-white/5">
+            {APPLICATIONS.slice(0, 3).map((app) => (
+                <div class="px-6 py-4 flex items-center justify-between hover:bg-white/5 transition-colors">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center">
+                            <span class="text-lg">📋</span>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-foreground">{app.name}</p>
+                            <p class="text-xs text-muted-foreground">{app.dialects.join(', ')}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="text-xs text-muted-foreground">{app.submittedAt}</span>
+                        <button class="btn-accent text-xs px-3 py-1">Review</button>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+
+</PortalLayout>

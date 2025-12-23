@@ -1,0 +1,324 @@
+<div id="donate-scene-container" class="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
+  <canvas id="donate-canvas" class="w-full h-full block"></canvas>
+</div>
+
+<script>
+  // --- Configuration & Theme ---
+  const COLORS = {
+    FOREST_GREEN: '#0A2F1F',
+    RICH_FOREST: '#1A4D2E',
+    SUNSET_ORANGE: '#E8995C',
+    LEAF_GREEN: '#7CB342',
+    OCEAN_BLUE: '#4A90A4',
+    GOLDEN_HOUR: '#F4C430',
+    TREE_BARK: '#3D2817',
+    DEER: '#8B5A2B',
+    RABBIT: '#D3C1A5',
+    FROG: '#7CB342',
+  };
+
+  // --- Classes ---
+
+  class Entity {
+    x: number;
+    y: number;
+    color: string;
+    
+    constructor(x: number, y: number, color: string) {
+      this.x = x;
+      this.y = y;
+      this.color = color;
+    }
+    
+    update(_time: number, _width: number, _height: number) {}
+    draw(_ctx: CanvasRenderingContext2D) {}
+  }
+
+  class Plant extends Entity {
+    targetHeight: number;
+    currentHeight: number;
+    growthSpeed: number;
+    type: 'tree' | 'shrub';
+    swayOffset: number;
+
+    constructor(x: number, y: number) {
+      super(x, y, COLORS.TREE_BARK);
+      this.type = Math.random() > 0.7 ? 'tree' : 'shrub';
+      this.targetHeight = this.type === 'tree' ? 100 + Math.random() * 100 : 20 + Math.random() * 30;
+      this.currentHeight = 0;
+      this.growthSpeed = 0.2 + Math.random() * 0.3;
+      this.swayOffset = Math.random() * Math.PI * 2;
+    }
+
+    update(_time: number) {
+      if (this.currentHeight < this.targetHeight) {
+        this.currentHeight += (this.targetHeight - this.currentHeight) * 0.02;
+      }
+    }
+
+    draw(ctx: CanvasRenderingContext2D) {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      
+      // Sway
+      const sway = Math.sin(Date.now() * 0.001 + this.swayOffset) * (this.currentHeight * 0.05);
+      
+      if (this.type === 'tree') {
+        // Trunk
+        ctx.fillStyle = COLORS.TREE_BARK;
+        ctx.fillRect(-2, -this.currentHeight, 4, this.currentHeight);
+        
+        // Foliage
+        ctx.fillStyle = COLORS.RICH_FOREST;
+        ctx.beginPath();
+        ctx.moveTo(0 + sway, -this.currentHeight - 30);
+        ctx.lineTo(20 + sway * 0.8, -this.currentHeight + 10);
+        ctx.lineTo(-20 + sway * 0.8, -this.currentHeight + 10);
+        ctx.fill();
+      } else {
+        // Shrub
+        ctx.fillStyle = COLORS.LEAF_GREEN;
+        ctx.beginPath();
+        ctx.arc(sway, -this.currentHeight, 10 + this.currentHeight * 0.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      
+      ctx.restore();
+    }
+  }
+
+  class Animal extends Entity {
+    type: 'deer' | 'rabbit' | 'frog';
+    vx: number;
+    direction: 1 | -1;
+    hopPhase: number;
+
+    constructor(x: number, y: number, type: 'deer' | 'rabbit' | 'frog') {
+      let color;
+      if (type === 'deer') color = COLORS.DEER;
+      else if (type === 'rabbit') color = COLORS.RABBIT;
+      else color = COLORS.FROG;
+      
+      super(x, y, color);
+      this.type = type;
+      this.direction = Math.random() > 0.5 ? 1 : -1;
+      this.vx = type === 'deer' ? 0.2 : (type === 'rabbit' ? 0.5 : 0.1);
+      this.hopPhase = Math.random() * Math.PI * 2;
+    }
+
+    update(time: number, width: number) {
+      // Movement
+      if (this.type === 'deer') {
+        this.x += this.vx * this.direction;
+      } else {
+        // Hopping logic
+        const hop = Math.sin(time * (this.type === 'rabbit' ? 5 : 8) + this.hopPhase);
+        if (hop > 0) {
+            this.x += this.vx * this.direction * 2; // Move only when hopping up
+        }
+      }
+
+      // Turn around at edges
+      if (this.x < 0 && this.direction === -1) this.direction = 1;
+      if (this.x > width && this.direction === 1) this.direction = -1;
+    }
+
+    draw(ctx: CanvasRenderingContext2D) {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.scale(this.direction, 1); // Face direction
+
+      ctx.fillStyle = this.color;
+
+      if (this.type === 'deer') {
+        // Simple Deer Shape (Geometric)
+        // Body
+        ctx.fillRect(-15, -25, 30, 15);
+        // Legs
+        const legAnim = Math.sin(Date.now() * 0.005) * 5;
+        ctx.fillRect(-15 + legAnim, -10, 4, 10);
+        ctx.fillRect(11 - legAnim, -10, 4, 10);
+        // Neck/Head
+        ctx.beginPath();
+        ctx.moveTo(10, -25);
+        ctx.lineTo(20, -40);
+        ctx.lineTo(10, -40);
+        ctx.lineTo(5, -25);
+        ctx.fill();
+        // Antlers (tiny lines)
+        ctx.strokeStyle = COLORS.TREE_BARK;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(20, -40);
+        ctx.lineTo(25, -50);
+        ctx.moveTo(20, -40);
+        ctx.lineTo(15, -48);
+        ctx.stroke();
+
+      } else if (this.type === 'rabbit') {
+        // Simple Rabbit
+        const hopY = Math.abs(Math.sin(Date.now() * 0.005 + this.hopPhase)) * 15;
+        ctx.translate(0, -hopY);
+        
+        // Body
+        ctx.beginPath();
+        ctx.ellipse(0, -5, 10, 7, 0, 0, Math.PI * 2);
+        ctx.fill();
+        // Ears
+        ctx.fillRect(5, -15, 2, 10);
+        ctx.fillRect(2, -15, 2, 10);
+
+      } else if (this.type === 'frog') {
+        // Simple Frog
+        const hopY = Math.max(0, Math.sin(Date.now() * 0.008 + this.hopPhase)) * 20;
+        ctx.translate(0, -hopY);
+
+        // Body
+        ctx.beginPath();
+        ctx.arc(0, -5, 6, 0, Math.PI * 2);
+        ctx.fill();
+        // Eyes
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(3, -9, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+  }
+
+  class Seed extends Entity {
+      vy: number;
+      groundY: number;
+      landed: boolean;
+
+      constructor(x: number, y: number, groundY: number) {
+          super(x, y, COLORS.GOLDEN_HOUR);
+          this.vy = 2 + Math.random() * 2;
+          this.groundY = groundY;
+          this.landed = false;
+      }
+
+      update(_time: number) {
+          if (!this.landed) {
+              this.y += this.vy;
+              if (this.y >= this.groundY) {
+                  this.y = this.groundY;
+                  this.landed = true;
+              }
+          }
+      }
+
+      draw(ctx: CanvasRenderingContext2D) {
+          if (this.landed) return; // Hide once landed (it becomes a plant)
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+          ctx.fill();
+      }
+  }
+
+  // --- Main Logic ---
+
+  const initScene = () => {
+    const container = document.getElementById('donate-scene-container');
+    const canvas = document.getElementById('donate-canvas');
+    if (!container || !canvas) return;
+
+    const ctx = (canvas as HTMLCanvasElement).getContext('2d');
+    if (!ctx) return;
+
+    let width: number, height: number;
+    let plants: Plant[] = [];
+    let animals: Animal[] = [];
+    let seeds: Seed[] = [];
+    let time = 0;
+
+    const resize = () => {
+      width = container.clientWidth;
+      height = container.clientHeight;
+      (canvas as HTMLCanvasElement).width = width;
+      (canvas as HTMLCanvasElement).height = height;
+      
+      // Reset but keep some initial state? No, fresh start on resize is easier
+      plants = [];
+      animals = [];
+      seeds = [];
+      
+      // Spawn initial plants
+      const groundY = height * 0.9;
+      for (let i = 0; i < 15; i++) {
+          const p = new Plant(Math.random() * width, groundY);
+          p.currentHeight = p.targetHeight * (0.5 + Math.random() * 0.5); // Already grown
+          plants.push(p);
+      }
+
+      // Spawn animals
+      animals.push(new Animal(width * 0.2, groundY, 'deer'));
+      animals.push(new Animal(width * 0.5, groundY, 'rabbit'));
+      animals.push(new Animal(width * 0.8, groundY, 'frog'));
+    };
+
+    // Interaction Hooks (to be called from Donate page)
+    window.plantSeed = () => {
+        const groundY = height * 0.9;
+        const x = Math.random() * width;
+        const seed = new Seed(x, -50, groundY);
+        seeds.push(seed);
+    };
+
+    const animate = () => {
+      time += 0.01;
+      ctx.clearRect(0, 0, width, height);
+
+      // Background (Transparent so CSS gradient shows through? Or draw here?)
+      // Let's draw a subtle atmospheric fog here
+      // ctx.fillStyle = 'rgba(10, 47, 31, 0.1)';
+      // ctx.fillRect(0, 0, width, height);
+
+      const groundY = height * 0.9;
+
+      // Draw Ground
+      ctx.fillStyle = '#1a3826'; // Darker green
+      ctx.fillRect(0, groundY, width, height - groundY);
+
+      // Update & Draw Plants
+      plants.forEach(p => { p.update(time); p.draw(ctx); });
+
+      // Update & Draw Animals
+      animals.forEach(a => { a.update(time, width); a.draw(ctx); });
+
+      // Update & Draw Seeds
+      seeds.forEach((s, index) => {
+          s.update(time);
+          s.draw(ctx);
+          if (s.landed) {
+              // Convert to plant
+              plants.push(new Plant(s.x, s.groundY));
+              seeds.splice(index, 1);
+          }
+      });
+
+      // Randomly spawn seeds occasionally
+      if (Math.random() > 0.995) {
+          window.plantSeed();
+      }
+
+      requestAnimationFrame(animate);
+    };
+
+    resize();
+    animate();
+    window.addEventListener('resize', resize);
+  };
+
+  initScene();
+  
+  // Expose type for TS
+  declare global {
+      interface Window {
+          plantSeed: () => void;
+      }
+  }
+</script>

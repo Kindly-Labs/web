@@ -1,0 +1,161 @@
+---
+import Layout from '../components/layouts/Layout.astro';
+---
+
+<Layout title="Research | AuralNet">
+  
+  <div class="min-h-screen pt-32 px-8 md:px-16 pb-32 max-w-[1400px] mx-auto">
+    
+    <!-- Abstract Header -->
+    <header class="mb-32">
+      <div class="flex flex-col md:flex-row justify-between items-start border-b border-foreground/20 pb-8 mb-8">
+        <h1 class="text-xs font-mono uppercase tracking-widest text-muted-foreground">[ RESEARCH / 001 ]</h1>
+        <div class="text-xs font-mono uppercase tracking-widest text-muted-foreground text-right hidden md:block">
+          Owly Labs Intelligence<br/>
+          San Francisco, CA
+        </div>
+      </div>
+
+      <h2 class="text-5xl md:text-8xl font-bold tracking-tighter mb-12 max-w-4xl leading-[0.9]">
+        The Architecture<br/>
+        of Aural<br/>
+        Intelligence.
+      </h2>
+
+      <p class="text-xl md:text-2xl font-medium leading-relaxed max-w-2xl text-muted-foreground">
+        <strong class="text-foreground">Abstract:</strong> Current Large Language Models (LLMs) operate on a text-first paradigm. 
+        This approach fails to capture paralinguistic signals—tone, prosody, and cultural context—resulting in 
+        catastrophic failure rates for non-standard dialects.
+      </p>
+    </header>
+
+    <!-- Section 1: The Three Streams -->
+    <section class="mb-48">
+      <div class="flex flex-col md:flex-row gap-16 md:gap-32">
+        <div class="w-full md:w-1/3">
+           <div class="sticky top-32">
+             <h3 class="text-xs font-mono uppercase tracking-widest mb-4 text-primary">01 // The Model</h3>
+             <h4 class="text-3xl font-bold mb-6">Triangulated Understanding</h4>
+             <p class="text-muted-foreground leading-relaxed">
+               AuralNet does not treat audio as a flat waveform. We decompose speech into three parallel data streams, 
+               allowing models to resolve ambiguity through triangulation.
+             </p>
+           </div>
+        </div>
+
+        <div class="w-full md:w-2/3 space-y-24 border-l border-foreground/10 pl-8 md:pl-16">
+          
+          <div class="group">
+            <h5 class="text-6xl font-light mb-6 group-hover:text-primary transition-colors">Acoustic</h5>
+            <p class="text-lg text-muted-foreground max-w-xl leading-relaxed">
+              <strong>The Signal.</strong> Raw phonetic data captured at 48kHz. Our dataset specifically targets 
+              "noisy" environments (street markets, kitchens, transit) to train robustness against real-world interference.
+            </p>
+          </div>
+
+          <div class="group">
+            <h5 class="text-6xl font-light mb-6 group-hover:text-primary transition-colors">Intent</h5>
+            <p class="text-lg text-muted-foreground max-w-xl leading-relaxed">
+              <strong>The Logic.</strong> Semantic mapping that transcends literal translation. We annotate for 
+              "speaker intent" rather than just word-for-word accuracy, bridging the gap between dialect idioms and standard language models.
+            </p>
+          </div>
+
+          <div class="group">
+            <h5 class="text-6xl font-light mb-6 group-hover:text-primary transition-colors">Context</h5>
+            <p class="text-lg text-muted-foreground max-w-xl leading-relaxed">
+              <strong>The Scene.</strong> Metadata layers describing the social dynamic, hierarchy, and physical environment. 
+              Crucial for resolving homophones and culturally dependent phrasing.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: The Benchmark -->
+    <section class="mb-48">
+      <div class="border-t border-foreground/20 pt-8 mb-16">
+        <h3 class="text-xs font-mono uppercase tracking-widest mb-4 text-primary">02 // The Audit</h3>
+        <h4 class="text-5xl md:text-7xl font-bold mb-12">Adversarial Evaluation</h4>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <div class="space-y-8">
+           <p class="text-xl leading-relaxed">
+             We do not test models on "textbook" speech. We test them on the edge cases that break them.
+           </p>
+           <ul class="space-y-4 font-mono text-sm border-l-2 border-primary pl-6">
+             <li class="flex justify-between">
+               <span>Standard Eval:</span>
+               <span class="text-muted-foreground">Read Script (Studio)</span>
+             </li>
+             <li class="flex justify-between font-bold">
+               <span>Aether Eval:</span>
+               <span class="text-primary">Spontaneous Speech (Field)</span>
+             </li>
+             <li class="flex justify-between mt-4 pt-4 border-t border-foreground/10">
+               <span>Result:</span>
+               <span class="text-muted-foreground">Exposes "Hallucination Gap"</span>
+             </li>
+           </ul>
+        </div>
+
+        <div class="bg-foreground text-background p-8 font-mono text-xs">
+           <div class="mb-2 opacity-50">SCIENTIFIC STANDARDS</div>
+           <div class="grid grid-cols-2 gap-4">
+             <div class="border border-white/20 p-4">
+               <div class="font-bold">Berkeley-Aligned</div>
+               <div class="opacity-60 mt-1">Methodology</div>
+             </div>
+             <div class="border border-white/20 p-4">
+               <div class="font-bold">HAI Protocols</div>
+               <div class="opacity-60 mt-1">Ethics & Safety</div>
+             </div>
+           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Access Levels -->
+    <section>
+      <div class="border-t border-foreground/20 pt-8 mb-16">
+        <h3 class="text-xs font-mono uppercase tracking-widest mb-4 text-primary">03 // Access</h3>
+        <h4 class="text-5xl md:text-7xl font-bold mb-12">Data Availability</h4>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        
+        <a href="/contact" class="group block border border-foreground/10 p-8 hover:bg-foreground hover:text-background transition-all duration-500">
+           <div class="font-mono text-xs mb-8 opacity-50 group-hover:opacity-100">LEVEL 1</div>
+           <h3 class="text-2xl font-bold mb-4">Sovereign Licensing</h3>
+           <p class="text-sm opacity-70 mb-8">
+             Full commercial access to the AuralNet registry. Raw audio + Triangulated Metadata for model training.
+           </p>
+           <span class="font-mono text-xs border-b border-current pb-1">Request License -></span>
+        </a>
+
+        <a href="/contact" class="group block border border-foreground/10 p-8 hover:bg-foreground hover:text-background transition-all duration-500">
+           <div class="font-mono text-xs mb-8 opacity-50 group-hover:opacity-100">LEVEL 2</div>
+           <h3 class="text-2xl font-bold mb-4">Benchmark Audit</h3>
+           <p class="text-sm opacity-70 mb-8">
+             One-time adversarial evaluation of your existing model against our standard "Blind Set."
+           </p>
+           <span class="font-mono text-xs border-b border-current pb-1">Start Audit -></span>
+        </a>
+
+        <div class="block border border-foreground/10 p-8 bg-foreground/5 relative overflow-hidden">
+           <div class="absolute top-4 right-4 text-xs font-mono text-primary animate-pulse">RESTRICTED</div>
+           <div class="font-mono text-xs mb-8 opacity-50">LEVEL 3</div>
+           <h3 class="text-2xl font-bold mb-4 text-foreground">Diamond Protocol</h3>
+           <p class="text-sm opacity-70 mb-8">
+             The Vault. Air-gapped, never-sold data reserved exclusively for Aether Certification. Prevents training contamination.
+           </p>
+           <span class="font-mono text-xs text-muted-foreground cursor-not-allowed">No Access</span>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</Layout>
