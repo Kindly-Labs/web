@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { RefreshCw, GitBranch, Copy, Check } from 'lucide-react';
+import Link from 'next/link';
+import { RefreshCw, GitBranch, Copy, Check, Activity } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useEnvironment } from '@/lib/context/EnvironmentContext';
 
@@ -107,6 +108,14 @@ export function CockpitFooter({ lastUpdated, error }: CockpitFooterProps) {
           <span className="h-1.5 w-1.5 rounded-full bg-purple-500" />
           AuralNet
         </a>
+        <span className="text-slate-700">|</span>
+        <Link
+          href="/status"
+          className="flex items-center gap-1 text-[10px] tracking-wider text-emerald-500 uppercase transition-colors hover:text-emerald-300"
+        >
+          <Activity size={10} />
+          Status
+        </Link>
       </nav>
 
       {/* Keyboard Shortcuts */}

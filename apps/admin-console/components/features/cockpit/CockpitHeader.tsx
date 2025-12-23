@@ -13,7 +13,9 @@ import {
   Key,
   Settings,
   Shield,
+  Database,
 } from 'lucide-react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { QuickActionButton } from './QuickActionButton';
 import { EnvironmentSwitcher } from './EnvironmentSwitcher';
@@ -93,6 +95,22 @@ export function CockpitHeader({
           )}
           {runningCount}/{totalCount} Services
         </div>
+
+        {/* Navigation Links */}
+        <Link
+          href="/pipeline"
+          className="flex items-center gap-1.5 rounded-full border border-slate-600/30 bg-slate-700/30 px-3 py-1 text-xs font-medium text-slate-300 hover:bg-slate-600/30 hover:text-white"
+        >
+          <Database size={12} />
+          Pipeline
+        </Link>
+        <Link
+          href="/status"
+          className="flex items-center gap-1.5 rounded-full border border-slate-600/30 bg-slate-700/30 px-3 py-1 text-xs font-medium text-slate-300 hover:bg-slate-600/30 hover:text-white"
+        >
+          <Activity size={12} />
+          Status
+        </Link>
       </div>
 
       {/* Center - Quick Actions */}
