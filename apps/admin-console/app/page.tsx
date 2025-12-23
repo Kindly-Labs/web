@@ -8,6 +8,7 @@ import {
   AIPerformancePanel,
   UserActivityPanel,
   ServiceTopologyPanel,
+  ProductionTopologyPanel,
   LogPanel,
   ViewportWarning,
   SiteLauncher,
@@ -16,9 +17,16 @@ import {
 import { PromptEditorModal } from '@/components/features/cockpit/modals/PromptEditorModal';
 import { AccessCodesModal } from '@/components/features/cockpit/modals/AccessCodesModal';
 import { SettingsModal } from '@/components/features/cockpit/modals/SettingsModal';
+import { DeployModal } from '@/components/features/cockpit/modals/DeployModal';
+import { SessionsModal } from '@/components/features/cockpit/modals/SessionsModal';
+import { AuditLogModal } from '@/components/features/cockpit/modals/AuditLogModal';
+import { DebugPanel } from '@/components/features/cockpit/debug/DebugPanel';
 import { useCockpitMetrics } from '@/lib/hooks/useCockpitMetrics';
+import { useProductionMetrics } from '@/lib/hooks/useProductionMetrics';
 import { usePipelineStageHealth } from '@/lib/hooks/usePipelineStageHealth';
 import { useKeyboardShortcuts } from '@/lib/hooks/useKeyboardShortcuts';
+import { useDebugState } from '@/lib/hooks/useDebugState';
+import { useEnvironment } from '@/lib/context/EnvironmentContext';
 import type { ServiceStatus, ServiceState } from '@/lib/types';
 
 type ServiceLocalState = {
@@ -28,6 +36,10 @@ type ServiceLocalState = {
 };
 
 export default function CockpitPage() {
+  // Environment context
+  const { environment, isAuthenticated } = useEnvironment();
+  const isProduction = environment === 'production';
+
   // Service management state (from original dashboard)
   const [services, setServices] = useState<ServiceStatus[]>([]);
   const [selectedService, setSelectedService] = useState<string | null>(null);
@@ -37,6 +49,13 @@ export default function CockpitPage() {
   const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
   const [isCodesModalOpen, setIsCodesModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
+  const [isSessionsModalOpen, setIsSessionsModalOpen] = useState(false);
+  const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
+  const [isDebugPanelOpen, setIsDebugPanelOpen] = useState(false);
+
+  // Debug state for tracking raw API responses
+  const { debugState, captureServices, captureMetrics } = useDebugState();
 
   // Quick action states
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -47,10 +66,32 @@ export default function CockpitPage() {
   const prevRunningRef = useRef<Record<string, boolean>>({});
   const stopTimersRef = useRef<Record<string, NodeJS.Timeout>>({});
 
-  // Cockpit metrics
-  const { metrics, isLoading, error, lastUpdated, refetch } = useCockpitMetrics();
+  // Cockpit metrics (local)
+  const {
+    metrics: localMetrics,
+    isLoading: isLoadingLocal,
+    error: localError,
+    lastUpdated: localLastUpdated,
+    refetch: refetchLocal,
+  } = useCockpitMetrics();
 
-  // Pipeline stage health (live probes)
+  // Production metrics
+  const {
+    metrics: prodMetrics,
+    isLoading: isLoadingProd,
+    error: prodError,
+    lastUpdated: prodLastUpdated,
+    refetch: refetchProd,
+  } = useProductionMetrics();
+
+  // Use appropriate metrics based on environment
+  const metrics = isProduction ? prodMetrics : localMetrics;
+  const isLoading = isProduction ? isLoadingProd : isLoadingLocal;
+  const error = isProduction ? prodError : localError;
+  const lastUpdated = isProduction ? prodLastUpdated : localLastUpdated;
+  const refetch = isProduction ? refetchProd : refetchLocal;
+
+  // Pipeline stage health (live probes) - only for local
   const {
     data: stageHealth,
     isRefreshing: isRefreshingHealth,
@@ -61,13 +102,24 @@ export default function CockpitPage() {
   const fetchServices = useCallback(async () => {
     try {
       const res = await fetch('/api/services');
-      const data: ServiceStatus[] = await res.json();
-      setServices(data);
+      if (!res.ok) {
+        // API returned error status - don't update services
+        return;
+      }
+      const data = await res.json();
+
+      // Validate response is an array (API may return error object)
+      if (!Array.isArray(data)) {
+        return;
+      }
+
+      setServices(data as ServiceStatus[]);
+      captureServices(data); // Capture for debug panel
 
       // Sync local state with actual running state
       setLocalStates((prev) => {
         const next = { ...prev };
-        for (const s of data) {
+        for (const s of data as ServiceStatus[]) {
           const wasRunning = prevRunningRef.current[s.name];
           const isRunning = s.running;
 
@@ -90,7 +142,7 @@ export default function CockpitPage() {
         return next;
       });
     } catch {
-      // Ignore errors
+      // Ignore fetch errors (network issues, etc.)
     }
   }, []);
 
@@ -99,6 +151,13 @@ export default function CockpitPage() {
     const interval = setInterval(fetchServices, 2000);
     return () => clearInterval(interval);
   }, [fetchServices]);
+
+  // Capture metrics for debug panel when they update
+  useEffect(() => {
+    if (metrics) {
+      captureMetrics(metrics);
+    }
+  }, [metrics, captureMetrics]);
 
   // Service control handlers
   const handleStart = async (service: string) => {
@@ -239,6 +298,8 @@ export default function CockpitPage() {
     onOpenPrompt: () => setIsPromptModalOpen(true),
     onOpenCodes: () => setIsCodesModalOpen(true),
     onOpenSettings: () => setIsSettingsModalOpen(true),
+    onOpenAudit: isProduction ? () => setIsAuditModalOpen(true) : undefined,
+    onToggleDebug: () => setIsDebugPanelOpen((prev) => !prev),
   });
 
   // Derived state
@@ -278,6 +339,7 @@ export default function CockpitPage() {
         onOpenPrompt={() => setIsPromptModalOpen(true)}
         onOpenCodes={() => setIsCodesModalOpen(true)}
         onOpenSettings={() => setIsSettingsModalOpen(true)}
+        onOpenAudit={isProduction ? () => setIsAuditModalOpen(true) : undefined}
         isRefreshing={isRefreshing}
         isExporting={isExporting}
       />
@@ -286,15 +348,19 @@ export default function CockpitPage() {
       <main className="grid min-h-0 flex-1 grid-cols-12 gap-3 p-3">
         {/* Top Row - 40vh */}
         <div className="col-span-3 row-span-1 min-h-0 overflow-hidden rounded-lg border border-slate-700/50 bg-slate-800/30">
-          <ServiceTopologyPanel
-            services={services}
-            serviceStates={serviceStates}
-            selectedService={selectedService}
-            onSelectService={setSelectedService}
-            onStartService={handleStart}
-            onStopService={handleStop}
-            healthDependencies={metrics?.health?.dependencies}
-          />
+          {isProduction ? (
+            <ProductionTopologyPanel onDeploy={() => setIsDeployModalOpen(true)} />
+          ) : (
+            <ServiceTopologyPanel
+              services={services}
+              serviceStates={serviceStates}
+              selectedService={selectedService}
+              onSelectService={setSelectedService}
+              onStartService={handleStart}
+              onStopService={handleStop}
+              healthDependencies={metrics?.health?.dependencies}
+            />
+          )}
         </div>
 
         <div className="col-span-4 row-span-1 min-h-0 overflow-hidden rounded-lg border border-slate-700/50 bg-slate-800/30">
@@ -339,6 +405,21 @@ export default function CockpitPage() {
       <PromptEditorModal isOpen={isPromptModalOpen} onClose={() => setIsPromptModalOpen(false)} />
       <AccessCodesModal isOpen={isCodesModalOpen} onClose={() => setIsCodesModalOpen(false)} />
       <SettingsModal isOpen={isSettingsModalOpen} onClose={() => setIsSettingsModalOpen(false)} />
+      <DeployModal isOpen={isDeployModalOpen} onClose={() => setIsDeployModalOpen(false)} />
+      <SessionsModal isOpen={isSessionsModalOpen} onClose={() => setIsSessionsModalOpen(false)} />
+      <AuditLogModal isOpen={isAuditModalOpen} onClose={() => setIsAuditModalOpen(false)} />
+
+      {/* Debug Panel */}
+      <DebugPanel
+        isOpen={isDebugPanelOpen}
+        onClose={() => setIsDebugPanelOpen(false)}
+        rawServices={debugState.rawServices}
+        rawMetrics={debugState.rawMetrics}
+        serviceStates={serviceStates}
+        lastFetchTime={debugState.lastFetchTime}
+        onRefreshServices={fetchServices}
+        onRefreshMetrics={refetch}
+      />
     </div>
   );
 }

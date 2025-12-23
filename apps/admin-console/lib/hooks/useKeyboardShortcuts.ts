@@ -14,6 +14,8 @@ export interface KeyboardShortcuts {
   onOpenPrompt?: () => void;
   onOpenCodes?: () => void;
   onOpenSettings?: () => void;
+  onOpenAudit?: () => void;
+  onToggleDebug?: () => void;
 }
 
 /**
@@ -27,6 +29,7 @@ export interface KeyboardShortcuts {
  * - P: Open prompt editor
  * - C: Open access codes
  * - ,: Open settings
+ * - A: Open audit log (production only)
  * - 1-5: Switch log presets (Smart, Errors, HTTP, Business, Debug)
  * - Ctrl/Cmd+K: Focus log search
  * - Escape: Blur focused element
@@ -48,6 +51,13 @@ export function useKeyboardShortcuts(shortcuts: KeyboardShortcuts) {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
         shortcuts.onFocusSearch?.();
+        return;
+      }
+
+      // Ctrl/Cmd + D: Toggle debug panel
+      if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+        e.preventDefault();
+        shortcuts.onToggleDebug?.();
         return;
       }
 
@@ -82,6 +92,10 @@ export function useKeyboardShortcuts(shortcuts: KeyboardShortcuts) {
         case ',':
           e.preventDefault();
           shortcuts.onOpenSettings?.();
+          break;
+        case 'a':
+          e.preventDefault();
+          shortcuts.onOpenAudit?.();
           break;
         case '1':
           e.preventDefault();
@@ -124,6 +138,8 @@ export const SHORTCUT_HINTS = [
   { key: 'E', action: 'Export' },
   { key: 'P', action: 'Prompt' },
   { key: 'C', action: 'Codes' },
+  { key: 'A', action: 'Audit' },
   { key: '1-5', action: 'Log presets' },
   { key: '⌘K', action: 'Search logs' },
+  { key: '⌘D', action: 'Debug' },
 ] as const;

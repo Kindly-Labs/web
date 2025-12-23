@@ -20,7 +20,7 @@ const processes = global.serviceProcesses!;
 async function isPortOpen(port: number, service?: string): Promise<boolean> {
   return new Promise((resolve) => {
     const socket = new net.Socket();
-    socket.setTimeout(100);
+    socket.setTimeout(500); // Increased from 100ms for slower service responses
     socket.once('connect', () => {
       socket.destroy();
       if (service) controlLog.portCheck(service, port, true);
@@ -71,25 +71,36 @@ export async function getServicesStatus(): Promise<ServiceStatus[]> {
       const internalProc = processes[name];
       const externalInfo = getPidFromLog(name);
 
-      // A service is "running" if:
-      // 1. We started it ourselves (internalProc)
-      // 2. There is a valid PID file (externalInfo)
+      // Detection priority for services with URLs: PORT CHECK is AUTHORITATIVE
+      // This ensures we detect externally-started services correctly
+      let running = false;
+      let detectionMethod: 'port' | 'pid' | 'memory' | 'none' = 'none';
 
-      let running = !!internalProc || !!externalInfo;
-
-      // Port check as a secondary verification
+      // Port check is the primary detection method for services with URLs
       if (config.url) {
         try {
           const url = new URL(config.url);
           const port = parseInt(url.port);
           if (port) {
-            const portOpen = await isPortOpen(port);
-            // If port is open, service is running (even if PID file missing)
-            if (portOpen) running = true;
-            // If port is strictly required for this service to be "up" and it's closed
-            else if (config.url) running = false;
+            const portOpen = await isPortOpen(port, name);
+            if (portOpen) {
+              running = true;
+              detectionMethod = 'port';
+            }
           }
         } catch (e) {}
+      }
+
+      // Fallback to PID/memory ONLY for services WITHOUT URLs
+      // (All real services have URLs, so this is mainly for future-proofing)
+      if (!running && !config.url) {
+        if (internalProc) {
+          running = true;
+          detectionMethod = 'memory';
+        } else if (externalInfo) {
+          running = true;
+          detectionMethod = 'pid';
+        }
       }
 
       return {
@@ -99,6 +110,7 @@ export async function getServicesStatus(): Promise<ServiceStatus[]> {
         pid: internalProc?.pid || externalInfo?.pid,
         startTime: (internalProc?.startTime || externalInfo?.startTime)?.toISOString(),
         url: config.url,
+        _detectionMethod: detectionMethod,
       };
     })
   );

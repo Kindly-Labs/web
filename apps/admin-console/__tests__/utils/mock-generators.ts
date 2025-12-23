@@ -207,6 +207,66 @@ export function createMockLogEntries(count = 10): MockLogEntry[] {
   return Array.from({ length: count }, createMockLogEntry);
 }
 
+// ============ PRODUCTION CONTROL PLANE MOCKS ============
+
+export interface MockProductionAuth {
+  token: string;
+  email: string;
+  expiresAt: number;
+}
+
+export function createMockProductionAuth(): MockProductionAuth {
+  return {
+    token: `eyJ${randomString(20)}.${randomString(30)}.${randomString(20)}`,
+    email: `admin-${randomString(4)}@kindly-labs.org`,
+    expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours from now
+  };
+}
+
+export interface MockSiteHealth {
+  status: 'online' | 'degraded' | 'offline';
+  latencyMs: number;
+  statusCode?: number;
+}
+
+export function createMockSiteHealth(status?: 'online' | 'degraded' | 'offline'): MockSiteHealth {
+  const actualStatus = status ?? randomPick(['online', 'degraded', 'offline'] as const);
+  return {
+    status: actualStatus,
+    latencyMs: actualStatus === 'offline' ? 0 : randomInt(50, 2500),
+    statusCode: actualStatus === 'offline' ? undefined : 200,
+  };
+}
+
+export interface MockProductionSession {
+  id: string;
+  startTime: string;
+  messageCount: number;
+  language?: string;
+  status: 'active' | 'ended';
+  clientId?: string;
+}
+
+export function createMockProductionSession(
+  status?: 'active' | 'ended'
+): MockProductionSession {
+  const id = `${randomString(8)}-${randomString(4)}-${randomString(4)}-${randomString(12)}`;
+  return {
+    id,
+    startTime: new Date(Date.now() - randomInt(0, 3600000)).toISOString(),
+    messageCount: randomInt(1, 50),
+    language: randomPick(['toi-HK', 'yue-HK', 'en-US', undefined] as const),
+    status: status ?? randomPick(['active', 'ended'] as const),
+    clientId: `client-${randomString(8)}`,
+  };
+}
+
+export function createMockProductionSessions(activeCount = 3, endedCount = 2): MockProductionSession[] {
+  const active = Array.from({ length: activeCount }, () => createMockProductionSession('active'));
+  const ended = Array.from({ length: endedCount }, () => createMockProductionSession('ended'));
+  return [...active, ...ended];
+}
+
 // ============ ASSERTION HELPERS ============
 
 /** Assert that a value is a non-empty, non-placeholder string */

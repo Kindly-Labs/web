@@ -6,11 +6,13 @@ interface SiteLauncherProps {
   className?: string;
 }
 
+const isProduction = process.env.NEXT_PUBLIC_BACKEND_URL?.includes('api.cogito.cv');
+
 const sites = [
   {
     name: 'Aether PWA',
     description: 'Consumer voice app',
-    url: 'http://localhost:3004',
+    url: isProduction ? 'https://speak.kindly-labs.org' : 'http://localhost:3004',
     icon: Globe,
     color: 'cyan',
     bgColor: 'bg-cyan-500/10',
@@ -20,7 +22,7 @@ const sites = [
   {
     name: 'Workbench',
     description: 'Labeling platform',
-    url: 'http://localhost:3003',
+    url: isProduction ? 'https://app.kindly-labs.org' : 'http://localhost:3003',
     icon: Terminal,
     color: 'amber',
     bgColor: 'bg-amber-500/10',
@@ -30,7 +32,7 @@ const sites = [
   {
     name: 'AuralNet',
     description: 'Enterprise portal & B2B site',
-    url: 'http://localhost:4321',
+    url: isProduction ? 'https://www.kindly-labs.org' : 'http://localhost:4321',
     icon: Briefcase,
     color: 'purple',
     bgColor: 'bg-purple-500/10',

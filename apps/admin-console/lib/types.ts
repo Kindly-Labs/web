@@ -7,6 +7,8 @@ export type ServiceStatus = {
   pid?: number;
   startTime?: string;
   url?: string;
+  /** Debug info: how the service was detected (port check, PID file, or in-memory) */
+  _detectionMethod?: 'port' | 'pid' | 'memory' | 'none';
 };
 
 export type ServiceConfig = {

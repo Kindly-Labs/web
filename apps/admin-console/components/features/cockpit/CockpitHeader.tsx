@@ -12,9 +12,11 @@ import {
   FileText,
   Key,
   Settings,
+  Shield,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { QuickActionButton } from './QuickActionButton';
+import { EnvironmentSwitcher } from './EnvironmentSwitcher';
 import { cn } from '@/lib/utils';
 
 interface CockpitHeaderProps {
@@ -31,6 +33,7 @@ interface CockpitHeaderProps {
   onOpenPrompt?: () => void;
   onOpenCodes?: () => void;
   onOpenSettings?: () => void;
+  onOpenAudit?: () => void;
   isRefreshing?: boolean;
   isExporting?: boolean;
 }
@@ -48,6 +51,7 @@ export function CockpitHeader({
   onOpenPrompt,
   onOpenCodes,
   onOpenSettings,
+  onOpenAudit,
   isRefreshing,
   isExporting,
 }: CockpitHeaderProps) {
@@ -62,9 +66,12 @@ export function CockpitHeader({
 
   return (
     <header className="flex h-12 items-center justify-between border-b border-slate-800/50 bg-slate-900/50 px-4 backdrop-blur-xl">
-      {/* Left - Title and Health */}
+      {/* Left - Title, Environment, and Health */}
       <div className="flex items-center gap-4">
         <h1 className="text-sm font-semibold tracking-wider text-white uppercase">Pilot Cockpit</h1>
+
+        {/* Environment Switcher */}
+        <EnvironmentSwitcher />
 
         {/* Health Badge */}
         <div
@@ -120,6 +127,14 @@ export function CockpitHeader({
             label="Settings"
             onClick={onOpenSettings}
             shortcut=","
+          />
+        )}
+        {onOpenAudit && (
+          <QuickActionButton
+            icon={Shield}
+            label="Audit"
+            onClick={onOpenAudit}
+            shortcut="A"
           />
         )}
       </div>

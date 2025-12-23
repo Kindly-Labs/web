@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Loader2, Plus, Copy, Trash2, Check } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Loader2, Plus, Copy, Trash2, Check, Globe, Laptop } from 'lucide-react';
 import { Modal } from '@/components/ui/modal';
 import { Button } from '@/components/ui/button';
+import { useEnvironment } from '@/lib/context/EnvironmentContext';
 import { cn } from '@/lib/utils';
 
 interface AccessCodesModalProps {
@@ -12,6 +13,9 @@ interface AccessCodesModalProps {
 }
 
 export function AccessCodesModal({ isOpen, onClose }: AccessCodesModalProps) {
+  const { environment, productionAuth } = useEnvironment();
+  const isProduction = environment === 'production';
+
   const [codes, setCodes] = useState<string[]>([]);
   const [newCode, setNewCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -20,18 +24,16 @@ export function AccessCodesModal({ isOpen, onClose }: AccessCodesModalProps) {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch codes when modal opens
-  useEffect(() => {
-    if (isOpen) {
-      fetchCodes();
-    }
-  }, [isOpen]);
-
-  const fetchCodes = async () => {
+  const fetchCodes = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/cockpit/access-codes');
+      const url = isProduction ? '/api/production/access-codes' : '/api/cockpit/access-codes';
+      const headers: Record<string, string> = {};
+      if (isProduction && productionAuth) {
+        headers['Authorization'] = `Bearer ${productionAuth.token}`;
+      }
+      const response = await fetch(url, { headers });
       if (!response.ok) throw new Error('Failed to fetch codes');
       const data = await response.json();
       setCodes(data.codes || []);
@@ -40,16 +42,28 @@ export function AccessCodesModal({ isOpen, onClose }: AccessCodesModalProps) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [isProduction, productionAuth]);
+
+  // Fetch codes when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      fetchCodes();
+    }
+  }, [isOpen, fetchCodes]);
 
   const handleAdd = async () => {
     if (!newCode.trim()) return;
     setIsAdding(true);
     setError(null);
     try {
-      const response = await fetch('/api/cockpit/access-codes', {
+      const url = isProduction ? '/api/production/access-codes' : '/api/cockpit/access-codes';
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (isProduction && productionAuth) {
+        headers['Authorization'] = `Bearer ${productionAuth.token}`;
+      }
+      const response = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ code: newCode.trim() }),
       });
       if (!response.ok) throw new Error('Failed to add code');
@@ -66,9 +80,17 @@ export function AccessCodesModal({ isOpen, onClose }: AccessCodesModalProps) {
     setDeletingCode(code);
     setError(null);
     try {
-      const response = await fetch(`/api/cockpit/access-codes?code=${encodeURIComponent(code)}`, {
-        method: 'DELETE',
-      });
+      let url: string;
+      const headers: Record<string, string> = {};
+      if (isProduction) {
+        url = `/api/production/access-codes/${encodeURIComponent(code)}`;
+        if (productionAuth) {
+          headers['Authorization'] = `Bearer ${productionAuth.token}`;
+        }
+      } else {
+        url = `/api/cockpit/access-codes?code=${encodeURIComponent(code)}`;
+      }
+      const response = await fetch(url, { method: 'DELETE', headers });
       if (!response.ok) throw new Error('Failed to revoke code');
       setCodes((prev) => prev.filter((c) => c !== code));
     } catch (err) {
@@ -87,6 +109,23 @@ export function AccessCodesModal({ isOpen, onClose }: AccessCodesModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Access Codes" size="md">
       <div className="space-y-4">
+        {/* Environment indicator */}
+        <div className="flex items-center gap-2 rounded-lg border border-slate-700/50 bg-slate-800/30 px-3 py-2 text-xs">
+          {isProduction ? (
+            <>
+              <Globe size={12} className="text-emerald-400" />
+              <span className="text-slate-400">Managing codes on</span>
+              <span className="font-medium text-emerald-400">Production</span>
+            </>
+          ) : (
+            <>
+              <Laptop size={12} className="text-sky-400" />
+              <span className="text-slate-400">Managing codes on</span>
+              <span className="font-medium text-sky-400">Local Dev</span>
+            </>
+          )}
+        </div>
+
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 size={24} className="animate-spin text-slate-400" />
