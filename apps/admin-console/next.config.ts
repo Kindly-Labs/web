@@ -14,6 +14,21 @@ const nextConfig: NextConfig = {
 
   // Enable React strict mode
   reactStrictMode: true,
+
+  // Security headers - allow embedding in ops.cogito.cv iframe
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: "frame-ancestors 'self' https://ops.cogito.cv",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
